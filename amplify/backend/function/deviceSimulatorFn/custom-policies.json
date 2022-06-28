@@ -1,0 +1,10 @@
+[
+  {
+    "Action": [
+      "geo:CalculateRoute"
+    ],
+    "Resource": [
+      "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain"
+    ]
+  }
+]

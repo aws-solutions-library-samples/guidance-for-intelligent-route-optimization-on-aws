@@ -1,0 +1,37 @@
+type Coords {
+  lng: Float!
+  lat: Float!
+}
+
+type Marker {
+  point: Coords!
+  label: String
+}
+
+type Itinerary
+  @model
+  @auth(rules: [{ allow: owner, operations: [create, read, update, delete] }]) {
+  id: ID!
+  label: String!
+  points: [Marker]!
+  date: AWSDate!
+  optimized: Boolean! @default(value: "false")
+  hasStarted: Boolean! @default(value: "false")
+  type: String!
+    @index(
+      name: "itinerariesByDate"
+      queryField: "itinerariesByDate"
+      sortKeyFields: ["date"]
+    )
+    @default(value: "itinerary")
+}
+
+type Mutation {
+  optimized(id: ID): Itinerary @function(name: "routeOptimizerFn-${env}")
+  startItinerary(id: ID): Boolean @function(name: "startItineraryFn-${env}")
+}
+
+type Query {
+  getDevicePosition(id: ID!, history: Boolean): [Coords]
+    @function(name: "getDevicePositionFn-${env}")
+}

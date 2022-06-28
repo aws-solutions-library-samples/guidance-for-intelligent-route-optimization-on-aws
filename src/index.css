@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap');
+
+[data-amplify-authenticator] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--amplify-colors-neutral-20);
+  padding: 0 5px;
+}
+
+.table-action-icon:hover {
+  color: var(--amplify-colors-brand-primary-60);
+}
+
+@media not all and (min-resolution:.001dpcm) {
+  @supports (-webkit-appearance:none) and (stroke-color:transparent) {
+    body { 
+      min-height: -webkit-fill-available;
+    }
+
+    [data-amplify-authenticator] {
+      min-height: -webkit-fill-available;
+    }
+  }
+}

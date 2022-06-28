@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "^0.11.1-rc.0"
+  }
+}

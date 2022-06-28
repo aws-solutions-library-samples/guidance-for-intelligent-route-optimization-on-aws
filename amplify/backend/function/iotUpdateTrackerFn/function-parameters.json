@@ -1,0 +1,21 @@
+{
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "awssupplychaindemopowertools",
+      "env": "dev",
+      "version": "Always choose latest version",
+      "isLatestVersionSelected": true
+    }
+  ],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "trackerName",
+      "environmentVariableName": "TRACKER_NAME"
+    },
+    {
+      "cloudFormationParameterName": "powertoolsServiceName",
+      "environmentVariableName": "POWERTOOLS_SERVICE_NAME"
+    }
+  ]
+}
