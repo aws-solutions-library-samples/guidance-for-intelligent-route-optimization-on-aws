@@ -73,7 +73,7 @@ amplify status
 ├──────────┼────────────────────────────┼───────────┼───────────────────┤
 │ Function │ getDevicePositionfn        │ Create    │ awscloudformation │
 ├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ customLocation     │ Create    │ awscloudformation │
+│ Custom   │ customLocation             │ Create    │ awscloudformation │
 ├──────────┼────────────────────────────┼───────────┼───────────────────┤
 │ Custom   │ iotResources               │ Create    │ awscloudformation │
 └──────────┴────────────────────────────┴───────────┴───────────────────┘
@@ -84,9 +84,10 @@ GraphQL transformer version: 2
 Before you can deploy the backend there are a few files that need to be modified:
 
 - `amplify/backend/awscloudformation/override.ts`
-- `amplify/backend/function/optimizerfn/custom-policies.json`
-- `amplify/backend/function/getDevicePositionfn/custom-policies.json`
+- `amplify/backend/function/routeOptimizerFn/custom-policies.json`
+- `amplify/backend/function/getDevicePositionFn/custom-policies.json`
 - `amplify/backend/function/iotUpdateTracker/custom-policies.json`
+- `amplify/backend/function/deviceSimulatorFn/custom-policies.json`
 
 All files have strings that represent ARN of other resources, for example: `arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain`, make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
 
@@ -126,7 +127,7 @@ aws iot describe-endpoint --endpoint-type iot:Data-ATS
 }
 ```
 
-Copy the endpoint address, and then paste it in the `amplify/backend/function/devicesimulatorfn/src/index.js` file:
+Copy the endpoint address, and then paste it in the `amplify/backend/function/deviceSimulatorFn/src/index.js` file:
 
 ```js
 const THING_ENDPOINT = "[some-id]-ats.iot.[region-name].amazonaws.com";
@@ -155,31 +156,33 @@ Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or pla
 
     Current Environment: dev
 
-┌──────────┬────────────────────────────┬───────────┬───────────────────┐
-│ Category │ Resource name              │ Operation │ Provider plugin   │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Auth     │ awssupplychaindemo3956d534 │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ mapdfbf163d                │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ placeindex87cda5eb         │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Api      │ awssupplychaindemo         │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ optimizerfn                │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ devicesimulatorfn          │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ iotUpdateTracker           │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ startItineraryfn           │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ getDevicePositionfn        │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ customLocation             │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ iotResources               │ Create    │ awscloudformation │
-└──────────┴────────────────────────────┴───────────┴───────────────────┘
+┌──────────┬──────────────────────────────┬───────────┬───────────────────┐
+│ Category │ Resource name                │ Operation │ Provider plugin   │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Auth     │ awssupplychaindemo6b91e579   │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ supplychainmap               │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ supplychainplace             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Api      │ awssupplychaindemo           │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ awssupplychaindemopowertools │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ routeOptimizerFn             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ deviceSimulatorFn            │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ iotUpdateTrackerFn           │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ startItineraryfn             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ getDevicePositionFn          │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ customLocation               │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ iotResources                 │ Create    │ awscloudformation │
+└──────────┴──────────────────────────────┴───────────┴───────────────────┘
 ? Are you sure you want to continue? Yes
  GraphQL schema compiled successfully.
 
