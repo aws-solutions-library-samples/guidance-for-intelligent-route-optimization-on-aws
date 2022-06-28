@@ -1,0 +1,12 @@
+{
+  "authRoleName": {
+    "Ref": "AuthRoleName"
+  },
+  "unauthRoleName": {
+    "Ref": "UnauthRoleName"
+  },
+  "indexName": "supplychainplace",
+  "dataProvider": "Here",
+  "dataSourceIntendedUse": "Storage",
+  "isDefault": true
+}

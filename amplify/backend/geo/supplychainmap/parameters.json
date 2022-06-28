@@ -1,0 +1,11 @@
+{
+  "authRoleName": {
+    "Ref": "AuthRoleName"
+  },
+  "unauthRoleName": {
+    "Ref": "UnauthRoleName"
+  },
+  "mapName": "supplychainmap",
+  "mapStyle": "VectorHereExplore",
+  "isDefault": true
+}

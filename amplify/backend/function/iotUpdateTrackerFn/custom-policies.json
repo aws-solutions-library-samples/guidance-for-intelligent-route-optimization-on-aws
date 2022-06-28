@@ -1,0 +1,10 @@
+[
+  {
+    "Action": [
+      "geo:BatchUpdateDevicePosition"
+    ],
+    "Resource": [
+      "arn:aws:geo:[region-name]:[account-id]:tracker/tracker_supplychain"
+    ]
+  }
+]

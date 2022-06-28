@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "storage": {
+      "Itinerary:@model(appsync)": [
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "awssupplychaindemopowertools",
+      "env": "dev",
+      "version": "Always choose latest version",
+      "isLatestVersionSelected": true
+    }
+  ],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "routeCalculatorName",
+      "environmentVariableName": "ROUTE_CALCULATOR_NAME"
+    },
+    {
+      "cloudFormationParameterName": "powertoolsServiceName",
+      "environmentVariableName": "POWERTOOLS_SERVICE_NAME"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "awssupplychaindemo",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/aamorosi/Codes/aws-location-service-supplychain/amplify/backend/api/awssupplychaindemo/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authawssupplychaindemo6b91e579"
+    }
+  }
+}
