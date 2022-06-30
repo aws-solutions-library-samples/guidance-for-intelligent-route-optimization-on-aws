@@ -133,35 +133,27 @@ exports.handler = async (event) => {
     };
   }
 
-  const visited = new Set();
-  let departureWaypointIdx = 0;
-  const optimizedMarkers = [markers[departureWaypointIdx]];
-
   // Departure city starts from 0; next departure city is determined based on sort results for shortest time
   // Implement Djikstra's algorithm - O(nlogn)
-  routeMatrix.forEach(() => {
-    const destinationWaypoint = routeMatrix[departureWaypointIdx];
-    visited.add(departureWaypointIdx);
-    const destinationWaypointTimes = destinationWaypoint.map(
-      (el) => el.DurationSeconds
-    );
-    const sortedDestinationWaypointTimes = destinationWaypointTimes.sort(
-      (a, b) => a - b
-    );
-    for (const [idx] of sortedDestinationWaypointTimes.entries()) {
-      if (visited.has(idx)) {
-        continue;
-      } else {
-        departureWaypointIdx = idx;
-        optimizedMarkers.push(markers[departureWaypointIdx]);
-        break;
+  const optimizedMarkers = [];
+  const visitedIdx = new Set();
+  let current = 0;
+  while (optimizedMarkers.length < markers.length) {
+    optimizedMarkers.push(markers[current]);
+    visitedIdx.add(current);
+    let closest = Infinity;
+    let closestIdx = -1;
+    routeMatrix[current].forEach(({ DurationSeconds }, idx) => {
+      if (visitedIdx.has(idx)) {
+        return;
       }
-    }
-  });
-
-  optimizedMarkers.forEach((marker) => {
-    logger.debug("label", marker.label);
-  });
+      if (DurationSeconds < closest) {
+        closestIdx = idx;
+        closest = DurationSeconds;
+      }
+    });
+    current = closestIdx;
+  }
 
   try {
     const { Attributes: updatedItinerary } = await dynamoDBClient.send(
