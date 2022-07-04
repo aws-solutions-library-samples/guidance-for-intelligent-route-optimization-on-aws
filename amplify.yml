@@ -3,6 +3,7 @@ backend:
   phases:
     preBuild:
       commands:
+        - yum install -y jq
         - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/awscloudformation/override.ts
         - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/awscloudformation/override.ts
         - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/routeOptimizerFn/custom-policies.json
@@ -16,9 +17,9 @@ backend:
         - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[some-id\]/$IOT_CORE_ENDPOINT_ID/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[YOUR_CERTIFICATE_ID\]/$IOT_CORE_CERTIFICATE_ID/g' amplify/backend/custom/iotResources/cdk-stack.ts
-        - echo "$(echo $secrets | jq -r -j '.certificate-pem')" >> amplify/backend/function/devicesimulatorfn/src/certs/certificate.pem.crt
-        - echo "$(echo $secrets | jq -r -j '.public-key')" >> amplify/backend/function/devicesimulatorfn/src/certs/public.pem.key
-        - echo "$(echo $secrets | jq -r -j '.private-key')" >> amplify/backend/function/devicesimulatorfn/src/certs/private.pem.key
+        - echo $secrets | jq -r -j '.certificate-pem' >> amplify/backend/function/devicesimulatorfn/src/certs/certificate.pem.crt
+        - echo $secrets | jq -r -j '.public-key' >> amplify/backend/function/devicesimulatorfn/src/certs/public.pem.key
+        - echo $secrets | jq -r -j '.private-key' >> amplify/backend/function/devicesimulatorfn/src/certs/private.pem.key
     build:
       commands:
         - "# Execute Amplify CLI with the helper script"
