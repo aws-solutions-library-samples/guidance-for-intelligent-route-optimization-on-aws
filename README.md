@@ -86,7 +86,7 @@ Before you can deploy the backend there are a few files that need to be modified
 - `amplify/backend/awscloudformation/override.ts`
 - `amplify/backend/function/routeOptimizerFn/custom-policies.json`
 - `amplify/backend/function/getDevicePositionFn/custom-policies.json`
-- `amplify/backend/function/iotUpdateTracker/custom-policies.json`
+- `amplify/backend/function/iotUpdateTrackerFn/custom-policies.json`
 - `amplify/backend/function/deviceSimulatorFn/custom-policies.json`
 
 All files have strings that represent ARN of other resources, for example: `arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain`, make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
@@ -96,9 +96,9 @@ Additionally, you'll have to run the following command to generate a new IoT Cor
 ```sh
 aws iot create-keys-and-certificate \
     --set-as-active \
-    --certificate-pem-outfile amplify/backend/function/devicesimulatorfn/src/certs/certificate.pem.crt \
-    --public-key-outfile amplify/backend/function/devicesimulatorfn/src/certs/public.pem.key \
-    --private-key-outfile amplify/backend/function/devicesimulatorfn/src/certs/private.pem.key
+    --certificate-pem-outfile amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt \
+    --public-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key \
+    --private-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
 
 {
     "certificateArn": "arn:aws:iot:[region-name]:[account-id]:cert/xxxxx",
