@@ -30,7 +30,7 @@ import {
   optimized as optimizedM,
   startItinerary as startItineraryM,
 } from "../graphql/mutations";
-import { Itinerary, Marker, Coords } from "../models";
+import { Itinerary, Marker } from "../models";
 import {
   CreateItineraryMutation,
   DeleteItineraryMutation,
