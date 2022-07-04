@@ -3,17 +3,17 @@ backend:
   phases:
     preBuild:
       commands:
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/awscloudformation/override.ts
-        - sed -i -e 's/\[account-id\]/$AWS_ACCOUNT_ID/g' amplify/backend/awscloudformation/override.ts
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/function/routeOptimizerFn/custom-policies.json
-        - sed -i -e 's/\[account-id\]/$AWS_ACCOUNT_ID/g' amplify/backend/function/routeOptimizerFn/custom-policies.json
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/function/getDevicePositionFn/custom-policies.json
-        - sed -i -e 's/\[account-id\]/$AWS_ACCOUNT_ID/g' amplify/backend/function/getDevicePositionFn/custom-policies.json
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/function/iotUpdateTracker/custom-policies.json
-        - sed -i -e 's/\[account-id\]/$AWS_ACCOUNT_ID/g' amplify/backend/function/iotUpdateTracker/custom-policies.json
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/function/deviceSimulatorFn/custom-policies.json
-        - sed -i -e 's/\[account-id\]/$AWS_ACCOUNT_ID/g' amplify/backend/function/deviceSimulatorFn/custom-policies.json
-        - sed -i -e 's/\[region-name\]/$AWS_REGION/g' amplify/backend/function/deviceSimulatorFn/src/index.js
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/awscloudformation/override.ts
+        - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/awscloudformation/override.ts
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/routeOptimizerFn/custom-policies.json
+        - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/function/routeOptimizerFn/custom-policies.json
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/getDevicePositionFn/custom-policies.json
+        - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/function/getDevicePositionFn/custom-policies.json
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/iotUpdateTracker/custom-policies.json
+        - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/function/iotUpdateTracker/custom-policies.json
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/deviceSimulatorFn/custom-policies.json
+        - sed -i -e 's/\[account-id\]/$ACCOUNT_ID/g' amplify/backend/function/deviceSimulatorFn/custom-policies.json
+        - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[some-id\]/$IOT_CORE_ENDPOINT_ID/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[YOUR_CERTIFICATE_ID\]/$IOT_CORE_CERTIFICATE_ID/g' amplify/backend/custom/iotResources/cdk-stack.ts
         # - sed -i -e 's/\[YOUR_CERTIFICATE_ID\]/$IOT_CORE_CERTIFICATE_ID/g' amplify/backend/function/devicesimulatorfn/src/certs/certificate.pem.crt

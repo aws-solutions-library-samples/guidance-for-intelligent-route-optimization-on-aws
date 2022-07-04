@@ -23,7 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 amplify/README.md
-amplify/cli.json
 amplify/hooks/*
 amplify/team-provider-info.json
 
