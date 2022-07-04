@@ -17,9 +17,9 @@ backend:
         - sed -i -e 's/\[region-name\]/$REGION/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[some-id\]/$IOT_CORE_ENDPOINT_ID/g' amplify/backend/function/deviceSimulatorFn/src/index.js
         - sed -i -e 's/\[YOUR_CERTIFICATE_ID\]/$IOT_CORE_CERTIFICATE_ID/g' amplify/backend/custom/iotResources/cdk-stack.ts
-        - echo $secrets | jq -r -j '.certificate-pem' >> amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt
-        - echo $secrets | jq -r -j '.public-key' >> amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key
-        - echo $secrets | jq -r -j '.private-key' >> amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
+        - echo $secrets | jq -r -j '."certificate-pem"' >> amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt
+        - echo $secrets | jq -r -j '."public-key"' >> amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key
+        - echo $secrets | jq -r -j '."private-key"' >> amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
     build:
       commands:
         - "# Execute Amplify CLI with the helper script"
