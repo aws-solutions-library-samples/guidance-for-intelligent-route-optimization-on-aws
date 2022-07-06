@@ -1,214 +1,51 @@
-# Amplify Supply Chain Demo
+# Intelligent Route Optimization and Tracking using Amazon Location Services and AWS Amplify
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Amplify CLI](http://docs.aws.amazon.com/amplify/latest/userguide/cli.html).
+
+## Overview
+This solution provides a reference implementation for route optimization and tracking that can be leveraged by organizations that serve their own customers “in the field.” There are two broad categories of these organizations: 1) Organizations that incorporate a field service business function, e.g., the repair of equipment that they sell to their end customers and 2) Organizations that incorporate a route sales business function, e.g., a CPG company’s own or contract employees stocking the shelves of a retailer with the CPG company’s products (called direct-to-store delivery or DSD). 
+
+## Solution Design
+This AWS reference solution is divided into 3 components - Route Entry, Route Calculation and Route Tracking:
+
+1. Route entry - The Route entry component leverages Amplify low code React development with AWS AppSync and Amazon DynamoDB to enable a field service dispatcher to enter and store destination and waypoint locations from a map. 
+2. Route calculation - The Route calculation component leverages AWS Lambda, Location Services matrix routing and AppSync to automatically create an optimized lowest cost route based on the shortest time to complete the trip and then displays the optimized route on the map. 
+3. Route tracking - The Route tracking component integrates the Amplify based React application with AWS App Sync, AWS IOT Core and Location Services Tracker to track our driver on the map as they complete their route. It simulates an IOT sensor/device installed in the driver's vehicle.
+
+![](images/arch-diagram.PNG)
+
+## Prerequisites
+This solution was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Amplify CLI](http://docs.aws.amazon.com/amplify/latest/userguide/cli.html).
 
 You will need to have a valid AWS Account in order to deploy these resources. These resources may incur costs to your AWS Account. The cost from most services are covered by the [AWS Free Tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all) but not all of them. If you don't have an AWS Account follow [these instructions to create one](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
 
+We highly recommend an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment to run and deploy this solution. However Cloud9 is not required and you can use any development environment of your choice.[Follow the steps here to set up your AWS Cloud9 environment](https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment-main.html)
+
+After cloning this repo you can setup the project so long the following prerequisites are installed:
+
+1. AWS CLI
+  1. Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
+  2. Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+  3. *Skip these steps if you are using AWS Cloud9*
+2. Node.js version >= 14.x
+  1. Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
+3. Npm version >= 8.x
+  1. Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+4. Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)
+  1. [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
+
+
 ## Setup
 
-After cloning this repo you can setup the project both using the provided Amplify backend (`amplify` directory) or by creating your own.
 
-### Requiremets
+### Install all dependencies
 
-- Node.js version >= 14.x
-- Npm version >= 8.x
-- Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)
-
-### Configure frontend application
-
-While in the root of the project directory, run the following command to install all the dependencies for the frontend application:
+While in the root of the project directory, run the following command to install all the dependencies:
 
 ```sh
 npm install
 ```
 
-### Use provided Amplify backend
-
-While still in the root of the project directory, run the following command to configure the backend:
-
-```sh
-amplify init
-
-Note: It is recommended to run this command from the root of your app directory
-? Enter a name for the environment dev
-? Choose your default editor: Visual Studio Code
-Using default provider  awscloudformation
-? Select the authentication method you want to use: AWS profile
-
-For more information on AWS Profiles, see:
-https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html
-
-? Please choose the profile you want to use default
-Adding backend environment dev to AWS Amplify app: d2mrv0blz6ulx8
-⠙ Initializing project in the cloud...
-
-# Additional logs were removed for brevity
-```
-
-Check that the Amplify CLI is able to detect the existing backend configuration:
-
-```sh
-amplify status
-
-    Current Environment: dev
-
-┌──────────┬────────────────────────────┬───────────┬───────────────────┐
-│ Category │ Resource name              │ Operation │ Provider plugin   │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Auth     │ awssupplychaindemo3956d534 │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ mapdfbf163d                │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ placeindex87cda5eb         │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Api      │ awssupplychaindemo         │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ optimizerfn                │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ devicesimulatorfn          │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ iotUpdateTracker           │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ startItineraryfn           │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Function │ getDevicePositionfn        │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ customLocation             │ Create    │ awscloudformation │
-├──────────┼────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ iotResources               │ Create    │ awscloudformation │
-└──────────┴────────────────────────────┴───────────┴───────────────────┘
-
-GraphQL transformer version: 2
-```
-
-Before you can deploy the backend there are a few files that need to be modified:
-
-- `amplify/backend/awscloudformation/override.ts`
-- `amplify/backend/function/routeOptimizerFn/custom-policies.json`
-- `amplify/backend/function/getDevicePositionFn/custom-policies.json`
-- `amplify/backend/function/iotUpdateTrackerFn/custom-policies.json`
-- `amplify/backend/function/deviceSimulatorFn/custom-policies.json`
-
-All files have strings that represent ARN of other resources, for example: `arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain`, make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
-
-Additionally, you'll have to run the following command to generate a new IoT Core certificate that will be used to connect to the IoT Core endpoint:
-
-```sh
-aws iot create-keys-and-certificate \
-    --set-as-active \
-    --certificate-pem-outfile amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt \
-    --public-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key \
-    --private-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
-
-{
-    "certificateArn": "arn:aws:iot:[region-name]:[account-id]:cert/xxxxx",
-    "certificatePem": "-----BEGIN CERTIFICATE-----\nxxxxxxxxxx==\n-----END CERTIFICATE-----\n",
-    "keyPair": {
-        "PublicKey": "-----BEGIN PUBLIC KEY-----\nxxxxx\n-----END PUBLIC KEY-----\n",
-        "PrivateKey": "-----BEGIN RSA PRIVATE KEY-----\nxxxxx\n-----END RSA PRIVATE KEY-----\n"
-    },
-    "certificateId": "[certificate-id]"
-}
-```
-
-Take the value of the `certificateId` key from the output and update the `certificateId` value in the `iotResources` section of the project found in the `amplify/backend/custom/iotResources/cdk-stack.ts` file:
-
-```ts
-// Identifier for the IoT Core Certificate, REPLACE THIS WITH YOUR CERTIFICATE ID
-const CERTIFICATE_ID = "[YOUR_CERTIFICATE_ID]";
-```
-
-Finally, before deploying the resources, run one last command to find out the URL of the IoT Core endpoint for the region and account you are using:
-
-```sh
-aws iot describe-endpoint --endpoint-type iot:Data-ATS
-{
-    "endpointAddress": "[some-id]-ats.iot.[region-name].amazonaws.com"
-}
-```
-
-Copy the endpoint address, and then paste it in the `amplify/backend/function/deviceSimulatorFn/src/index.js` file:
-
-```js
-const THING_ENDPOINT = "[some-id]-ats.iot.[region-name].amazonaws.com";
-```
-
-Finally deploy the backend to the cloud:
-
-```sh
-amplify push
-Some Lambda function environment variables are missing values in this Amplify environment.
-✔ Enter the missing environment variable value of ROUTE_CALCULATOR in optimizerfn: · routecalculator_supplychain
-✔ Enter the missing environment variable value of ROUTE_CALCULATOR_NAME in devicesimulatorfn: · routecalculator_supplychain
-✔ Enter the missing environment variable value of TRACKER_NAME in iotUpdateTracker: · tracker_supplychain
-✔ Enter the missing environment variable value of TRACKER_NAME in getDevicePositionfn: · tracker_supplychain
-Overrides functionality is not implemented for this category
-Overrides functionality is not implemented for this category
-⠏ Fetching updates to backend environment: dev from the cloud.✅ GraphQL schema compiled successfully.
-
-Edit your schema at /home/ec2-user/environment/amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at /home/ec2-user/environment/amplify/backend/api/awssupplychaindemo/schema
-
-Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
-✔ Successfully pulled backend environment dev from the cloud.
-⠙ Building resource api/awssupplychaindemo GraphQL schema compiled successfully.
-
-Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
-
-    Current Environment: dev
-
-┌──────────┬──────────────────────────────┬───────────┬───────────────────┐
-│ Category │ Resource name                │ Operation │ Provider plugin   │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Auth     │ awssupplychaindemo6b91e579   │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ supplychainmap               │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Geo      │ supplychainplace             │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Api      │ awssupplychaindemo           │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ awssupplychaindemopowertools │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ routeOptimizerFn             │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ deviceSimulatorFn            │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ iotUpdateTrackerFn           │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ startItineraryfn             │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Function │ getDevicePositionFn          │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ customLocation               │ Create    │ awscloudformation │
-├──────────┼──────────────────────────────┼───────────┼───────────────────┤
-│ Custom   │ iotResources                 │ Create    │ awscloudformation │
-└──────────┴──────────────────────────────┴───────────┴───────────────────┘
-? Are you sure you want to continue? Yes
- GraphQL schema compiled successfully.
-
-Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
-⠹ Building resource api/awssupplychaindemo GraphQL schema compiled successfully.
-
-Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
-```
-
-At the very last question Amplify CLI will ask you if you want to generate the code for the API, answer **no**, since this sample already provides queries, mutations, and subscriptions.
-
-```sh
-? Do you want to generate code for your newly created GraphQL API No
-
-# Additional logs were removed for brevity
-```
-
-As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
-
-```sh
-aws lambda add-permission --function-name iotUpdateTracker-dev --statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
-```
-
-When the backend is deployed, you can start the frontend application. Go to the [Run the app locally](#run-the-app-locally) section to learn how to run the frontend application locally.
-
-### Create your own backend
+### **OPTION 1 (RECOMMENDED)**: Create your own amplify backend
 
 > **Note**
 > If you clone this repository _as-is_ and decide to create your own backend, delete or rename the `amplify` directory that contains the Amplify CLI generated files and folders before starting to follow the steps below.
@@ -250,7 +87,7 @@ Adding backend environment dev to AWS Amplify app: d2mrv0blz6ulx8
 
 Then start adding resources to the backend.
 
-#### Step 2: Create a the Amazon Location Service resources
+#### Step 2: Create Amazon Location Service resources
 
 While in the root of the project run the following command:
 
@@ -300,7 +137,7 @@ Available advanced settings:
 ✅ Successfully added resource supplychainplace locally.
 ```
 
-Next, add an Amplify Custom Resource, this is needed because at the moment Amplify CLI doesn't support creating Route Calculator and Tracker resources yet:
+Next, add an Amplify Custom Resource. This is needed because at the moment Amplify CLI doesn't support creating Route Calculator and Tracker resources yet:
 
 ```sh
 amplify add custom
@@ -1015,7 +852,195 @@ aws lambda add-permission --function-name iotUpdateTrackerFn-dev --statement-id 
 npm start
 ```
 
-### Clean up
+
+### **OPTION 2**: Use provided Amplify backend
+
+While still in the root of the project directory, run the following command to configure the backend:
+
+```sh
+amplify init
+
+Note: It is recommended to run this command from the root of your app directory
+? Enter a name for the environment dev
+? Choose your default editor: Visual Studio Code
+Using default provider  awscloudformation
+? Select the authentication method you want to use: AWS profile
+
+For more information on AWS Profiles, see:
+https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html
+
+? Please choose the profile you want to use default
+Adding backend environment dev to AWS Amplify app: d2mrv0blz6ulx8
+⠙ Initializing project in the cloud...
+
+# Additional logs were removed for brevity
+```
+
+Check that the Amplify CLI is able to detect the existing backend configuration:
+
+```sh
+amplify status
+
+    Current Environment: dev
+
+┌──────────┬────────────────────────────┬───────────┬───────────────────┐
+│ Category │ Resource name              │ Operation │ Provider plugin   │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Auth     │ awssupplychaindemo3956d534 │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ mapdfbf163d                │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ placeindex87cda5eb         │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Api      │ awssupplychaindemo         │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Function │ optimizerfn                │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Function │ devicesimulatorfn          │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Function │ iotUpdateTracker           │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Function │ startItineraryfn           │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Function │ getDevicePositionfn        │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ customLocation             │ Create    │ awscloudformation │
+├──────────┼────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ iotResources               │ Create    │ awscloudformation │
+└──────────┴────────────────────────────┴───────────┴───────────────────┘
+
+GraphQL transformer version: 2
+```
+
+Before you can deploy the backend there are a few files that need to be modified:
+
+- `amplify/backend/awscloudformation/override.ts`
+- `amplify/backend/function/routeOptimizerFn/custom-policies.json`
+- `amplify/backend/function/getDevicePositionFn/custom-policies.json`
+- `amplify/backend/function/iotUpdateTrackerFn/custom-policies.json`
+- `amplify/backend/function/deviceSimulatorFn/custom-policies.json`
+
+All files have strings that represent ARN of other resources, for example: `arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain`, make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
+
+Additionally, you'll have to run the following command to generate a new IoT Core certificate that will be used to connect to the IoT Core endpoint:
+
+```sh
+aws iot create-keys-and-certificate \
+    --set-as-active \
+    --certificate-pem-outfile amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt \
+    --public-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key \
+    --private-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
+
+{
+    "certificateArn": "arn:aws:iot:[region-name]:[account-id]:cert/xxxxx",
+    "certificatePem": "-----BEGIN CERTIFICATE-----\nxxxxxxxxxx==\n-----END CERTIFICATE-----\n",
+    "keyPair": {
+        "PublicKey": "-----BEGIN PUBLIC KEY-----\nxxxxx\n-----END PUBLIC KEY-----\n",
+        "PrivateKey": "-----BEGIN RSA PRIVATE KEY-----\nxxxxx\n-----END RSA PRIVATE KEY-----\n"
+    },
+    "certificateId": "[certificate-id]"
+}
+```
+
+Take the value of the `certificateId` key from the output and update the `certificateId` value in the `iotResources` section of the project found in the `amplify/backend/custom/iotResources/cdk-stack.ts` file:
+
+```ts
+// Identifier for the IoT Core Certificate, REPLACE THIS WITH YOUR CERTIFICATE ID
+const CERTIFICATE_ID = "[YOUR_CERTIFICATE_ID]";
+```
+
+Finally, before deploying the resources, run one last command to find out the URL of the IoT Core endpoint for the region and account you are using:
+
+```sh
+aws iot describe-endpoint --endpoint-type iot:Data-ATS
+{
+    "endpointAddress": "[some-id]-ats.iot.[region-name].amazonaws.com"
+}
+```
+
+Copy the endpoint address, and then paste it in the `amplify/backend/function/deviceSimulatorFn/src/index.js` file:
+
+```js
+const THING_ENDPOINT = "[some-id]-ats.iot.[region-name].amazonaws.com";
+```
+
+Finally deploy the backend to the cloud:
+
+```sh
+amplify push
+Some Lambda function environment variables are missing values in this Amplify environment.
+✔ Enter the missing environment variable value of ROUTE_CALCULATOR in optimizerfn: · routecalculator_supplychain
+✔ Enter the missing environment variable value of ROUTE_CALCULATOR_NAME in devicesimulatorfn: · routecalculator_supplychain
+✔ Enter the missing environment variable value of TRACKER_NAME in iotUpdateTracker: · tracker_supplychain
+✔ Enter the missing environment variable value of TRACKER_NAME in getDevicePositionfn: · tracker_supplychain
+Overrides functionality is not implemented for this category
+Overrides functionality is not implemented for this category
+⠏ Fetching updates to backend environment: dev from the cloud.✅ GraphQL schema compiled successfully.
+
+Edit your schema at /home/ec2-user/environment/amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at /home/ec2-user/environment/amplify/backend/api/awssupplychaindemo/schema
+
+Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
+✔ Successfully pulled backend environment dev from the cloud.
+⠙ Building resource api/awssupplychaindemo GraphQL schema compiled successfully.
+
+Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
+
+    Current Environment: dev
+
+┌──────────┬──────────────────────────────┬───────────┬───────────────────┐
+│ Category │ Resource name                │ Operation │ Provider plugin   │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Auth     │ awssupplychaindemo6b91e579   │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ supplychainmap               │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Geo      │ supplychainplace             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Api      │ awssupplychaindemo           │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ awssupplychaindemopowertools │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ routeOptimizerFn             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ deviceSimulatorFn            │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ iotUpdateTrackerFn           │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ startItineraryfn             │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Function │ getDevicePositionFn          │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ customLocation               │ Create    │ awscloudformation │
+├──────────┼──────────────────────────────┼───────────┼───────────────────┤
+│ Custom   │ iotResources                 │ Create    │ awscloudformation │
+└──────────┴──────────────────────────────┴───────────┴───────────────────┘
+? Are you sure you want to continue? Yes
+ GraphQL schema compiled successfully.
+
+Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
+⠹ Building resource api/awssupplychaindemo GraphQL schema compiled successfully.
+
+Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
+```
+
+At the very last question Amplify CLI will ask you if you want to generate the code for the API, answer **no**, since this sample already provides queries, mutations, and subscriptions.
+
+```sh
+? Do you want to generate code for your newly created GraphQL API No
+
+# Additional logs were removed for brevity
+```
+
+As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
+
+```sh
+aws lambda add-permission --function-name iotUpdateTracker-dev --statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
+```
+
+When the backend is deployed, you can start the frontend application. Go to the [Run the app locally](#run-the-app-locally) section to learn how to run the frontend application locally.
+
+
+## Clean up
 
 ```sh
 amplify delete
