@@ -45,7 +45,7 @@ While in the root of the project directory, run the following command to install
 npm install
 ```
 
-### **Option 1(Recommended)**: CREATE YOUR OWN AMPLIFY BACKEND
+### **OPTION 1(Recommended)**: CREATE YOUR OWN AMPLIFY BACKEND
 
 > **Note**
 > If you clone this repository _as-is_ and decide to create your own backend, delete or rename the `amplify` directory that contains the Amplify CLI generated files and folders before starting to follow the steps below.
@@ -830,9 +830,7 @@ Content changes in Lambda layer awssupplychaindemopowertools detected.
 # Additional logs were removed for brevity
 ```
 
-````
-
-At the very last question Amplify CLI will ask you if you want to generate the code for the API, answer **no**, since this sample already provides queries, mutations, and subscriptions.
+At the very last question Amplify CLI will ask you if you want to generate the code for the API. Answer **no**, since this sample already provides queries, mutations, and subscriptions.
 
 ```sh
 ? Do you want to generate code for your newly created GraphQL API No
@@ -1018,9 +1016,8 @@ Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or pla
 ⠹ Building resource api/awssupplychaindemo GraphQL schema compiled successfully.
 
 Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or place .graphql files in a directory at amplify/backend/api/awssupplychaindemo/schema
-```
 
-At the very last question Amplify CLI will ask you if you want to generate the code for the API, answer **no**, since this sample already provides queries, mutations, and subscriptions.
+At the very last question Amplify CLI will ask you if you want to generate the code for the API. Answer **no**, since this sample already provides queries, mutations, and subscriptions.
 
 ```sh
 ? Do you want to generate code for your newly created GraphQL API No
