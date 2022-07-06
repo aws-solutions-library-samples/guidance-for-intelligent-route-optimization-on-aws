@@ -119,7 +119,7 @@ Available advanced settings:
 ✅ Successfully added resource supplychainmap locally.
 ```
 
-Then add a Place Index resource:
+Next, add a Place index resource:
 
 ```sh
 amplify add geo
@@ -137,7 +137,7 @@ Available advanced settings:
 ✅ Successfully added resource supplychainplace locally.
 ```
 
-Next, add an Amplify Custom Resource. This is needed because at the moment Amplify CLI doesn't support creating Route Calculator and Tracker resources yet:
+Next, add an Amplify Custom resource. These custom resources are AWS Lambda backed resources. They are needed here because at the moment Amplify CLI doesn't support creating Route calculator and Tracker resources yet:
 
 ```sh
 amplify add custom
@@ -146,7 +146,7 @@ amplify add custom
 ✅ Created skeleton CDK stack in amplify/backend/custom/customLocation directory
 ```
 
-Before starting to defining resources in the CDK stack you need to add a new dependency to the stack, open the `amplify/backend/custom/customResourceXXXXX/package.json` file in your text editor and replace its content with this:
+Before starting to defining resources in the CDK stack you need to add a new dependency to the stack. Open the `amplify/backend/custom/customResourceXXXXX/package.json` file in your text editor and replace its content with this:
 
 ```json
 {
@@ -170,13 +170,13 @@ Before starting to defining resources in the CDK stack you need to add a new dep
 }
 ```
 
-Then, while in the `amplify/backend/custom/customLocation` directory, run `npm i` in your terminal to install the dependencies.
+While in the `amplify/backend/custom/customLocation`directory, run `npm i` in your terminal to install dependencies.
 
-Open the `amplify/backend/custom/customLocation/cdk-stack.ts` file and add the code that you can find in the [`amplify/backend/custom/customLocation/cdk-stack.ts`](amplify/backend/custom/customLocation/cdk-stack.ts) file of this repo.
+Open the `amplify/backend/custom/customLocation/cdk-stack.ts` file and add the code from [`amplify/backend/custom/customLocation/cdk-stack.ts`](amplify/backend/custom/customLocation/cdk-stack.ts) in this repo.
 
-Next, you need to allow the authenticated IAM role to access the Route Calculator resource. This will allow logged-in users to call the `geo:CalculateRoute` API.
+Next, you need to allow the authenticated IAM role to access the Route calculator resource. This will allow logged-in users to call the `geo:CalculateRoute` API.
 
-To do so we need to extend the Amplify generated IAM role by running:
+From the root of the project run the following command to extend the Amplify generated IAM role:
 
 ```sh
 amplify override project
@@ -184,7 +184,7 @@ amplify override project
 ✔ Do you want to edit override.ts file now? (Y/n) · no
 ```
 
-And then add the following statement to the `override.ts` file that was generated (`amplify/backend/awscloudformation/override.ts`):
+Next add the following statement to the `override.ts` file that was generated (`amplify/backend/awscloudformation/override.ts`):
 
 ```ts
 import { AmplifyRootStackTemplate } from "@aws-amplify/cli-extensibility-helper";
@@ -220,7 +220,7 @@ export function override(resources: AmplifyRootStackTemplate) {
 
 #### Step 3: Initialize the AppSync GraphQL API
 
-Continue by adding an AppSync API:
+From the root of the projec folder, continue by adding an AppSync API:
 
 ```sh
 amplify add api
@@ -275,7 +275,7 @@ type Itinerary
 
 #### Step 4: Create the AWS Lambda to simulate a device movement
 
-As a next step, before starting to create some Lambda functions, we will create a Lambda Layer that will be shared by the functions.
+As a next step, before starting to create some Lambda functions, you will create a Lambda Layer that will be shared by these functions. From the root of the project folder run the following command:
 
 ```sh
 amplify add function
@@ -294,7 +294,7 @@ Move your libraries to the following folder:
 # Additional logs were removed for brevity
 ```
 
-Next, open the `amplify/backend/function/awssupplychaindemopowertools/lib/nodejs` folder that was added to your project and run `npm i @aws-lambda-powertools/logger@latest` to install the [AWS Lambda Powertools Logger](https://awslabs.github.io/aws-lambda-powertools-typescript/latest/core/logger/) that we will be using to create structured logs for our Lambda functions.
+Next, open the `amplify/backend/function/awssupplychaindemopowertools/lib/nodejs` folder that was added to your project and run `npm i @aws-lambda-powertools/logger@latest` to install the [AWS Lambda Powertools Logger](https://awslabs.github.io/aws-lambda-powertools-typescript/latest/core/logger/) that you will use to create structured logs for our Lambda functions.
 
 Having JSON structured log entries helps not only in searching, but also produces consistent logs containing enough context and data to ask arbitrary questions on the status of your system. We can take advantage of the logger from [AWS Lambda Powertools for TypeScript](https://github.com/awslabs/aws-lambda-powertools-typescript).
 
@@ -320,7 +320,7 @@ module.exports = {
 };
 ```
 
-Next, create the first Lambda function that will be used to simulate a truck driving around the map:
+Next, create the first Lambda function that will be used to simulate a truck driving on the route in the map. From the root of the project folder run the following command:
 
 ```sh
 amplify add function
@@ -338,7 +338,7 @@ Available advanced settings:
 
 ? Do you want to configure advanced settings? Yes
 ? Do you want to access other resources in this project from your Lambda function? Yes
-? Select the categories you want this function to have access to. storage
+? Select the categories you want this function to have access to- api, storage
 ? Select the operations you want to permit on Itinerary:@model(appsync) read
 
 You can access the following resource attributes as environment variables from your Lambda function
@@ -393,7 +393,7 @@ aws iot describe-endpoint --endpoint-type iot:Data-ATS
 }
 ```
 
-Next, since we want this Lambda function to be running for as long as possible, we will extend the default timeout duration of 25 seconds to 15 minutes. To do so, open the `amplify/backend/function/deviceSimulatorFn/deviceSimulatorFn-cloudformation-template.json` file and find the line that has the `"Timeout": 25` text, and replace it to `"Timeout": 900` (15 minutes).
+Next, since you want this Lambda function to be running for as long as possible, let's extend the default timeout duration of 25 seconds to 15 minutes. To do so, open the `amplify/backend/function/deviceSimulatorFn/deviceSimulatorFn-cloudformation-template.json` file and find the line that has the `"Timeout": 25` text, and replace it with `"Timeout": 900` (15 minutes).
 
 Finally, before moving forward to the next resource, open the `amplify/backend/function/devicesimulator/custom-policies.json` file and add the following code:
 
@@ -410,14 +410,13 @@ Finally, before moving forward to the next resource, open the `amplify/backend/f
 
 #### Step 5: Create the IoT Core resources
 
-Next, continue by running the following command to generate a new IoT Core certificate that will be used by the function to connect to the IoT Core endpoint, this is one of the few manual steps that you will need to run as it's easier to manage this kind of resources via the AWS CLI rather than with Amplify:
+Next, continue by running the following command to generate a new IoT Core certificate that will be used by the function to connect to the IoT Core endpoint. This is one of the few manual steps that you will need to run since it's easier to manage this resource via the AWS CLI than with Amplify:
+
+Navigate to the amplify/backend/function/devicesimulatorfn/src/certs folder.
 
 ```sh
-aws iot create-keys-and-certificate \
-    --set-as-active \
-    --certificate-pem-outfile amplify/backend/function/devicesimulatorfn/src/certs/certificate.pem.crt \
-    --public-key-outfile amplify/backend/function/devicesimulatorfn/src/certs/public.pem.key \
-    --private-key-outfile amplify/backend/function/devicesimulatorfn/src/certs/private.pem.key
+aws iot create-keys-and-certificate --set-as-active --certificate-pem-outfile "certificate.pem.crt" --public-key-outfile "public.pem.key" --private-key-outfile "private.pem.key"
+
 
 {
     "certificateArn": "arn:aws:iot:[region-name]:[account-id]:cert/xxxxx",
@@ -430,9 +429,9 @@ aws iot create-keys-and-certificate \
 }
 ```
 
-Take the value of the `certificateId` key from the output and update the `certificateId` value in the `iotResources` that we are about to create below.
+Make a note of the `certificateId` key from the output above. You will use this to update the `certificateId` value in the `iotResources` custom resource that you create below.
 
-Once again we can use the `amplify add custom` command to create the IoT resources that we need with CDK:
+Once again we can use the `amplify add custom` command to create the IoT resources that we need with CDK. From the root folder of the project, run the following command:
 
 ```sh
 amplify add custom
@@ -464,9 +463,9 @@ Then, just like you did before, open the file at `amplify/backend/custom/iotReso
 }
 ```
 
-After that, while in the `amplify/backend/custom/iotResources` directory run the `npm i` command to install the dependencies.
+While in the `amplify/backend/custom/iotResources` directory run the `npm i` command to install the dependencies.
 
-Then, open the `amplify/backend/custom/iotResources/cdk-stack.ts` file and update it with the content of the [`iotResources/cdk-stack.ts`](amplify/backend/custom/iotResources/cdk-stack.ts) from this repo.
+Next open the `amplify/backend/custom/iotResources/cdk-stack.ts` file and update it with the contents of the [`iotResources/cdk-stack.ts`](amplify/backend/custom/iotResources/cdk-stack.ts) from this repo.
 
 Before moving on, find the line that looks like this:
 
@@ -479,7 +478,7 @@ And replace the value between the quotes with the certificate id that you create
 
 #### Step 6: Create the remaining Lambda functions
 
-Next, create a new AWS Lambda function to optimize the route:
+Next, create a new AWS Lambda function to optimize the route. From the root of the project folder, run the following command:
 
 ```sh
 amplify add function
@@ -497,7 +496,7 @@ Available advanced settings:
 
 ? Do you want to configure advanced settings? Yes
 ? Do you want to access other resources in this project from your Lambda function? Yes
-? Select the categories you want this function to have access to. storage
+? Select the categories you want this function to have access to: api, storage
 ? Select the operations you want to permit on Itinerary:@model(appsync) read, update
 
 You can access the following resource attributes as environment variables from your Lambda function
@@ -556,7 +555,7 @@ Finally, open the `amplify/backend/function/routeOptimizerFn/custom-policies.jso
 
 **Note**: Make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
 
-The next step is to create another function that will be in charge of processing the events that are sent to the IoT Core endpoint.
+Next, let's create another function that will process events sent to the IoT Core endpoint. From the root of the project folder, run the following command:
 
 ```sh
 amplify add function
@@ -604,7 +603,7 @@ Next, in the `amplify/backend/function/iotUpdateTrackerFn/src` folder, run the f
 npm i @aws-sdk/client-location
 ```
 
-Then open the `amplify/backend/function/iotUpdateTrackerFn/src/index.js` file and replace its contents with the ones you can find in the [`amplify/backend/function/iotUpdateTrackerFn/src/index.js`](amplify/backend/function/iotUpdateTrackerFn/src/index.js) of this repo.
+Then open the `amplify/backend/function/iotUpdateTrackerFn/src/index.js` file and replace its contents with [`amplify/backend/function/iotUpdateTrackerFn/src/index.js`](amplify/backend/function/iotUpdateTrackerFn/src/index.js) from our repo.
 
 Finally, open the `amplify/backend/function/iotUpdateTrackerFn/custom-policies.json` file and replace its contents with the following:
 
@@ -621,7 +620,7 @@ Finally, open the `amplify/backend/function/iotUpdateTrackerFn/custom-policies.j
 
 **Note**: Make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
 
-Proceed to add another function, this one will be used as custom Lambda resolver for AppSync and it will be in charge of starting an itinerary:
+Proceed to add another function, this one will be used as custom Lambda resolver for AppSync and it will be in charge of starting an itinerary. From the root of the project folder, run the following command:
 
 ```sh
 amplify add function
@@ -639,7 +638,7 @@ Available advanced settings:
 
 ? Do you want to configure advanced settings? Yes
 ? Do you want to access other resources in this project from your Lambda function? Yes
-? Select the categories you want this function to have access to. function, storage
+? Select the categories you want this function to have access to: function, api, storage
 ? Function has 3 resources in this project. Select the one you would like your Lambda to access deviceSimulatorFn
 ? Select the operations you want to permit on deviceSimulatorFn read
 ? Select the operations you want to permit on Itinerary:@model(appsync) read, update
@@ -683,7 +682,8 @@ npm i @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb @aws-sdk/client-lambda
 
 Then open the `amplify/backend/function/startItineraryFn/src/index.js` file and replace its contents with the ones you can find in the [`amplify/backend/function/startItineraryFn/src/index.js`](amplify/backend/function/startItineraryFn/src/index.js) of this repo.
 
-Then, add one last function, this one will be used to retrieve the position of a decvice via AppSync:
+
+Finally add one additional function to retrieve the position of the vehicle(iot device) via AppSync. From the root of the project folder run the following command:
 
 ```sh
 amplify add function
@@ -751,7 +751,7 @@ Finally, open the `amplify/backend/function/getDevicePositionFn/custom-policies.
 
 #### Step 7: Update the GraphQL schema
 
-Now that we have added more functions, we need to update the GraphQL schema to include the custom mutations and queries.
+Now that we have added more functions, we need to update the GraphQL schema to include custom mutations and queries.
 
 Open the `amplify/backend/schema/schema.graphql` file and add the following statements to it:
 
@@ -922,14 +922,11 @@ Before you can deploy the backend there are a few files that need to be modified
 
 All files have strings that represent ARN of other resources, for example: `arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain`, make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
 
-Additionally, you'll have to run the following command to generate a new IoT Core certificate that will be used to connect to the IoT Core endpoint:
+Additionally, you'll have to run the following command to generate a new IoT Core certificate that will be used to connect to the IoT Core endpoint. From the amplify/backend/function/deviceSimulatorFn/src/certs, run the following command
 
 ```sh
-aws iot create-keys-and-certificate \
-    --set-as-active \
-    --certificate-pem-outfile amplify/backend/function/deviceSimulatorFn/src/certs/certificate.pem.crt \
-    --public-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/public.pem.key \
-    --private-key-outfile amplify/backend/function/deviceSimulatorFn/src/certs/private.pem.key
+
+aws iot create-keys-and-certificate --set-as-active --certificate-pem-outfile "certificate.pem.crt" --public-key-outfile "public.pem.key" --private-key-outfile "private.pem.key"
 
 {
     "certificateArn": "arn:aws:iot:[region-name]:[account-id]:cert/xxxxx",
@@ -1034,7 +1031,7 @@ At the very last question Amplify CLI will ask you if you want to generate the c
 As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
 
 ```sh
-aws lambda add-permission --function-name iotUpdateTracker-dev --statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
+aws lambda add-permission --function-name iotUpdateTrackerFn-dev --statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
 ```
 
 When the backend is deployed, you can start the frontend application. Go to the [Run the app locally](#run-the-app-locally) section to learn how to run the frontend application locally.
