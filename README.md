@@ -9,7 +9,7 @@ This AWS reference solution is divided into 3 components - Route Entry, Route Ca
 
 1. Route entry - The Route entry component leverages Amplify low code React development with AWS AppSync and Amazon DynamoDB to enable a field service dispatcher to enter and store destination and waypoint locations from a map. 
 2. Route calculation - The Route calculation component leverages AWS Lambda, Location Services matrix routing and AppSync to automatically create an optimized lowest cost route based on the shortest time to complete the trip and then displays the optimized route on the map. 
-3. Route tracking - The Route tracking component integrates the Amplify based React application with AWS App Sync, AWS IOT Core and Location Services Tracker to track our driver on the map as they complete their route. It simulates an IOT sensor/device installed in the driver's vehicle.
+3. Route tracking - The Route tracking component integrates the Amplify based React application with AWS App Sync, AWS IOT Core and Location Services Tracker to track our driver on the map as they complete their route. This component simulates an IOT sensor/device installed in the driver's vehicle.
 
 ![](images/arch-diagram.PNG)
 
@@ -18,20 +18,20 @@ This solution was bootstrapped with [Create React App](https://github.com/facebo
 
 You will need to have a valid AWS Account in order to deploy these resources. These resources may incur costs to your AWS Account. The cost from most services are covered by the [AWS Free Tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all) but not all of them. If you don't have an AWS Account follow [these instructions to create one](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
 
-We highly recommend an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment to run and deploy this solution. However Cloud9 is not required and you can use any development environment of your choice.[Follow the steps here to set up your AWS Cloud9 environment](https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment-main.html)
+We highly recommend an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment to run and deploy this solution. However Cloud9 is not required and you can use any development environment of your choice. [Follow the steps here to set up your AWS Cloud9 environment](https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment-main.html)
 
 After cloning this repo you can setup the project so long the following prerequisites are installed:
 
 1. AWS CLI
-  1. Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
-  2. Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
-  3. *Skip these steps if you are using AWS Cloud9*
+  - Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
+  - Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+  - *Skip these steps if you are using AWS Cloud9*
 2. Node.js version >= 14.x
-  1. Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
+  - Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
 3. Npm version >= 8.x
-  1. Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+  - Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 4. Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)
-  1. [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
+  - [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
 
 
 ## Setup
@@ -45,7 +45,7 @@ While in the root of the project directory, run the following command to install
 npm install
 ```
 
-### **OPTION 1 (RECOMMENDED)**: Create your own amplify backend
+### **Option 1(Recommended)**: CREATE YOUR OWN AMPLIFY BACKEND
 
 > **Note**
 > If you clone this repository _as-is_ and decide to create your own backend, delete or rename the `amplify` directory that contains the Amplify CLI generated files and folders before starting to follow the steps below.
@@ -853,7 +853,7 @@ npm start
 ```
 
 
-### **OPTION 2**: Use provided Amplify backend
+### **OPTION 2**: USE PROVIDED AMPLIFY BACKEND
 
 While still in the root of the project directory, run the following command to configure the backend:
 
