@@ -22,16 +22,16 @@ We highly recommend an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment 
 
 After cloning this repo you can setup the project so long the following prerequisites are installed:
 
-1. AWS CLI
-  - Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
-  - Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
-  - *Skip these steps if you are using AWS Cloud9*
-2. Node.js version >= 14.x
-  - Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
-3. Npm version >= 8.x
-  - Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-4. Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)
-  - [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
+1. **AWS CLI**
+    - Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
+    - Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+    - *Skip these steps if you are using AWS Cloud9*
+2. **Node.js version >= 14.x**
+    - Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
+3. **Npm version >= 8.x**
+    - Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+4. **Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)**
+    - [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
 
 
 ## Setup
