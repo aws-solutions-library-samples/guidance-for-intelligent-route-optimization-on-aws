@@ -1,14 +1,9 @@
 import React, { useContext } from "react";
-import {
-  Flex,
-  Text,
-  Button,
-  IconRemove,
-  useTheme,
-} from "@aws-amplify/ui-react";
+import { Flex, Text, Button, useTheme } from "@aws-amplify/ui-react";
 
 import { MapContext } from "../Map";
 import type { MarkerItem } from "../Map";
+import { FiMinus } from "react-icons/fi";
 
 type MarkerItemLineProps = {
   children?: React.ReactNode;
@@ -39,7 +34,7 @@ const MarkerItemLine: React.FC<MarkerItemLineProps> = ({
       <Flex width="10%" justifyContent={"center"} alignItems={"center"}>
         {disabled ? null : (
           <Button size={"small"} onClick={() => send("REMOVE_MARKER", { idx })}>
-            <IconRemove />
+            <FiMinus />
           </Button>
         )}
       </Flex>
