@@ -4,7 +4,9 @@
       "geo:CalculateRouteMatrix"
     ],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_supplychain"
+      }
     ]
   }
 ]

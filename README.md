@@ -1,19 +1,21 @@
 # Intelligent Route Optimization and Tracking using Amazon Location Services and AWS Amplify
 
-
 ## Overview
-This solution provides a reference implementation for route optimization and tracking that can be leveraged by organizations that serve their own customers “in the field.” There are two broad categories of these organizations: 1) Organizations that incorporate a field service business function, e.g., the repair of equipment that they sell to their end customers and 2) Organizations that incorporate a route sales business function, e.g., a CPG company’s own or contract employees stocking the shelves of a retailer with the CPG company’s products (called direct-to-store delivery or DSD). 
+
+This solution provides a reference implementation for route optimization and tracking that can be leveraged by organizations that serve their own customers “in the field.” There are two broad categories of these organizations: 1) Organizations that incorporate a field service business function, e.g., the repair of equipment that they sell to their end customers and 2) Organizations that incorporate a route sales business function, e.g., a CPG company’s own or contract employees stocking the shelves of a retailer with the CPG company’s products (called direct-to-store delivery or DSD).
 
 ## Solution Design
+
 This AWS reference solution is divided into 3 components - Route Entry, Route Calculation and Route Tracking:
 
-1. Route entry - The Route entry component leverages Amplify low code React development with AWS AppSync and Amazon DynamoDB to enable a field service dispatcher to enter and store destination and waypoint locations from a map. 
-2. Route calculation - The Route calculation component leverages AWS Lambda, Location Services matrix routing and AppSync to automatically create an optimized lowest cost route based on the shortest time to complete the trip and then displays the optimized route on the map. 
+1. Route entry - The Route entry component leverages Amplify low code React development with AWS AppSync and Amazon DynamoDB to enable a field service dispatcher to enter and store destination and waypoint locations from a map.
+2. Route calculation - The Route calculation component leverages AWS Lambda, Location Services matrix routing and AppSync to automatically create an optimized lowest cost route based on the shortest time to complete the trip and then displays the optimized route on the map.
 3. Route tracking - The Route tracking component integrates the Amplify based React application with AWS App Sync, AWS IOT Core and Location Services Tracker to track our driver on the map as they complete their route. This component simulates an IOT sensor/device installed in the driver's vehicle.
 
 ![](images/arch-diagram.PNG)
 
 ## Prerequisites
+
 This solution was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Amplify CLI](http://docs.aws.amazon.com/amplify/latest/userguide/cli.html).
 
 You will need to have a valid AWS Account in order to deploy these resources. These resources may incur costs to your AWS Account. The cost from most services are covered by the [AWS Free Tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all) but not all of them. If you don't have an AWS Account follow [these instructions to create one](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
@@ -23,19 +25,17 @@ We highly recommend an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment 
 After cloning this repo you can setup the project so long the following prerequisites are installed:
 
 1. **AWS CLI**
-    - Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
-    - Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
-    - *Skip these steps if you are using AWS Cloud9*
+   - Follow these steps to [install the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+   - Configure the AWS CLI using [Quick configuration with aws configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+   - _Skip these steps if you are using AWS Cloud9_
 2. **Node.js version >= 14.x**
-    - Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
+   - Verify that your Node.js version >=14.x. Download [latest version here](https://nodejs.org/en/download/)
 3. **Npm version >= 8.x**
-    - Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+   - Verify that your npm version >=8.x. Verify and download [latest version here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 4. **Amplify CLI `npm i -g @aws-amplify/cli` (v8.0.2 or higher)**
-    - [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
-
+   - [Install and configure the Amplify CLI](https://docs.amplify.aws/cli/start/install/). Our solution requires v8.0.2 or higher of the Amplify CLI
 
 ## Setup
-
 
 ### Install all dependencies
 
@@ -204,8 +204,11 @@ export function override(resources: AmplifyRootStackTemplate) {
         Version: "2012-10-17",
         Statement: [
           {
-            Resource:
-              "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain",
+            Resource: {
+              "Fn::Sub":
+                // eslint-disable-next-line no-template-curly-in-string
+                "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_supplychain",
+            },
             Action: ["geo:CalculateRoute*"],
             Effect: "Allow",
           },
@@ -215,8 +218,6 @@ export function override(resources: AmplifyRootStackTemplate) {
   ];
 }
 ```
-
-**Note**: Make sure to update the arn to include the AWS Region and [Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of your Amplify project.
 
 #### Step 3: Initialize the AppSync GraphQL API
 
@@ -303,7 +304,7 @@ Then create a file at `amplify/backend/function/awssupplychaindemopowertools/opt
 ```js
 const { Logger } = require("@aws-lambda-powertools/logger");
 
-const awsLambdaPowertoolsVersion = "0.11.1-rc.0";
+const awsLambdaPowertoolsVersion = "1.1.0";
 
 const logger = new Logger({
   persistentLogAttributes: {
@@ -367,12 +368,12 @@ You can access the following resource attributes as environment variables from y
         ROUTE_CALCULATOR_NAME
 ? Do you want to configure secret values this function can access? No
 ? Do you want to edit the local lambda function now? No
-Successfully added resource devicesimulatorfn locally.
+Successfully added resource deviceSimulatorFn locally.
 
 # Additional logs were removed for brevity
 ```
 
-Next, continue by navigating to the function's folder (`amplify/backend/function/devicesimulatorfn/src`) with your terminal, and then running the following commands to create the directory structure we need as well as installing some dependencies:
+Next, continue by navigating to the function's folder (`amplify/backend/function/deviceSimulatorFn/src`) with your terminal, and then running the following commands to create the directory structure we need as well as installing some dependencies:
 
 ```sh
 mkdir certs
@@ -380,7 +381,7 @@ touch utils.js
 npm i @aws-sdk/client-location @turf/along @turf/helpers aws-iot-device-sdk-v2
 ```
 
-Then open the `utils.js` file you just created (full path `amplify/backend/function/devicesimulatorfn/src/utils.js`) and add the code that you can find at the following link from [this repository](amplify/backend/function/devicesimulatorfn/src/utils.js).
+Then open the `utils.js` file you just created (full path `amplify/backend/function/deviceSimulatorFn/src/utils.js`) and add the code that you can find at the following link from [this repository](amplify/backend/function/deviceSimulatorFn/src/utils.js).
 
 Finally, open the `index.js` file and add the code you can find this link from [the repository](amplify/backend/function/devicesimulatorfn/src/index.js).
 
@@ -395,14 +396,16 @@ aws iot describe-endpoint --endpoint-type iot:Data-ATS
 
 Next, since you want this Lambda function to be running for as long as possible, let's extend the default timeout duration of 25 seconds to 15 minutes. To do so, open the `amplify/backend/function/deviceSimulatorFn/deviceSimulatorFn-cloudformation-template.json` file and find the line that has the `"Timeout": 25` text, and replace it with `"Timeout": 900` (15 minutes).
 
-Finally, before moving forward to the next resource, open the `amplify/backend/function/devicesimulator/custom-policies.json` file and add the following code:
+Finally, before moving forward to the next resource, open the `amplify/backend/function/deviceSimulatorFn/custom-policies.json` file and add the following code:
 
 ```json
 [
   {
     "Action": ["geo:CalculateRoute"],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_supplychain"
+      }
     ]
   }
 ]
@@ -547,7 +550,9 @@ Finally, open the `amplify/backend/function/routeOptimizerFn/custom-policies.jso
   {
     "Action": ["geo:CalculateRouteMatrix"],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_supplychain"
+      }
     ]
   }
 ]
@@ -612,7 +617,9 @@ Finally, open the `amplify/backend/function/iotUpdateTrackerFn/custom-policies.j
   {
     "Action": ["geo:BatchUpdateDevicePosition"],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:tracker/tracker_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:tracker/tracker_supplychain"
+      }
     ]
   }
 ]
@@ -682,7 +689,6 @@ npm i @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb @aws-sdk/client-lambda
 
 Then open the `amplify/backend/function/startItineraryFn/src/index.js` file and replace its contents with the ones you can find in the [`amplify/backend/function/startItineraryFn/src/index.js`](amplify/backend/function/startItineraryFn/src/index.js) of this repo.
 
-
 Finally add one additional function to retrieve the position of the vehicle(iot device) via AppSync. From the root of the project folder run the following command:
 
 ```sh
@@ -738,12 +744,11 @@ Finally, open the `amplify/backend/function/getDevicePositionFn/custom-policies.
 ```json
 [
   {
-    "Action": [
-      "geo:GetDevicePosition",
-      "geo:BatchGetDevicePosition"
-    ],
+    "Action": ["geo:BatchUpdateDevicePosition"],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:tracker/tracker_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:tracker/tracker_supplychain"
+      }
     ]
   }
 ]
@@ -836,7 +841,7 @@ At the very last question Amplify CLI will ask you if you want to generate the c
 ? Do you want to generate code for your newly created GraphQL API No
 
 # Additional logs were removed for brevity
-````
+```
 
 As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
 
@@ -849,7 +854,6 @@ aws lambda add-permission --function-name iotUpdateTrackerFn-dev --statement-id 
 ```sh
 npm start
 ```
-
 
 ### **OPTION 2**: USE PROVIDED AMPLIFY BACKEND
 
@@ -961,7 +965,7 @@ const THING_ENDPOINT = "[some-id]-ats.iot.[region-name].amazonaws.com";
 
 Finally deploy the backend to the cloud:
 
-```sh
+````sh
 amplify push
 Some Lambda function environment variables are missing values in this Amplify environment.
 ✔ Enter the missing environment variable value of ROUTE_CALCULATOR in optimizerfn: · routecalculator_supplychain
@@ -1023,7 +1027,7 @@ At the very last question Amplify CLI will ask you if you want to generate the c
 ? Do you want to generate code for your newly created GraphQL API No
 
 # Additional logs were removed for brevity
-```
+````
 
 As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
 
@@ -1032,7 +1036,6 @@ aws lambda add-permission --function-name iotUpdateTrackerFn-dev --statement-id 
 ```
 
 When the backend is deployed, you can start the frontend application. Go to the [Run the app locally](#run-the-app-locally) section to learn how to run the frontend application locally.
-
 
 ## Clean up
 
@@ -1049,4 +1052,3 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
-

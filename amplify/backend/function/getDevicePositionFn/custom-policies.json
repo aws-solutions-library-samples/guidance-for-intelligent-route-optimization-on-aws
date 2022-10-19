@@ -5,7 +5,9 @@
       "geo:BatchGetDevicePosition"
     ],
     "Resource": [
-      "arn:aws:geo:[region-name]:[account-id]:tracker/tracker_supplychain"
+      {
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:tracker/tracker_supplychain"
+      }
     ]
   }
 ]
