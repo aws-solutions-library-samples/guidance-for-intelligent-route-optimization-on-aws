@@ -15,8 +15,11 @@ export function override(resources: AmplifyRootStackTemplate) {
         Version: "2012-10-17",
         Statement: [
           {
-            Resource:
-              "arn:aws:geo:[region-name]:[account-id]:route-calculator/routecalculator_supplychain",
+            Resource: {
+              "Fn::Sub":
+                // eslint-disable-next-line no-template-curly-in-string
+                "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_supplychain",
+            },
             Action: ["geo:CalculateRoute*"],
             Effect: "Allow",
           },
