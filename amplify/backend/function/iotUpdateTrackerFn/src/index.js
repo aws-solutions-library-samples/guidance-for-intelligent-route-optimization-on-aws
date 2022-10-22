@@ -2,15 +2,15 @@
 	ENV
 	REGION
 	TRACKER_NAME
-	POWERTOOLS_SERVICE_NAME
 Amplify Params - DO NOT EDIT */
-const { logger } = require("/opt/powertools");
 const {
   LocationClient,
   BatchUpdateDevicePositionCommand,
 } = require("@aws-sdk/client-location");
+const { Logger } = require("@aws-lambda-powertools/logger");
 
 const locationClient = new LocationClient();
+const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 
 /**
  * @type {import('@types/aws-lambda').IoTEvent}

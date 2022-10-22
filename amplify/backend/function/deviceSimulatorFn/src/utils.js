@@ -6,8 +6,6 @@ const {
 const { lineString } = require("@turf/helpers");
 const along = require("@turf/along").default;
 
-const { logger } = require("/opt/powertools");
-
 const locationClient = new LocationClient();
 
 /**
@@ -35,16 +33,13 @@ const buildConnection = (clientId, endpoint) => {
 
 class RouteLeg {
   /**
-   * @param {import('@aws-sdk/client-location').CalculateRouteCommandOutput} route
+   * @param {import('@aws-sdk/client-location').Leg} leg
    */
-  constructor(route) {
-    this.route = route;
-    const { Legs: legs, Summary: summary } = this.route;
-    const { Distance: distance } = summary;
-    this.startPosition = legs[0].StartPosition;
-    this.endPosition = legs[0].EndPosition;
-    this.totalDistance = distance;
-    this.lineString = lineString(legs[0].Geometry?.LineString);
+  constructor(leg) {
+    this.startPosition = leg.StartPosition;
+    this.endPosition = leg.EndPosition;
+    this.totalDistance = leg.Distance;
+    this.lineString = lineString(leg.Geometry?.LineString);
 
     /** @type {number} */
     this.currentStep = 0;
@@ -64,15 +59,15 @@ class RouteLeg {
 class Itinerary {
   /**
    * @param {string} itineraryId
+   * @param {import('@aws-lambda-powertools/logger').Logger} logger
    */
-  constructor(itineraryId) {
+  constructor(itineraryId, logger) {
     this.id = itineraryId;
+    this.logger = logger;
 
     this.ioTConnection = undefined;
     this.ioTtopic = undefined;
 
-    /** @type {?Promise<import('@aws-sdk/client-location').CalculateRouteCommandOutput[]>} */
-    this.routes = null;
     /** @type {?RouteLeg[]} */
     this.legs = null;
     // Total distance in km
@@ -97,12 +92,12 @@ class Itinerary {
     try {
       this.ioTtopic = topic;
       const connection = buildConnection(clientId, endpoint);
-      logger.info("Connecting to IoT Core");
+      this.logger.info("Connecting to IoT Core");
       await connection.connect();
-      logger.info("Successfully connected to IoT Core");
+      this.logger.info("Successfully connected to IoT Core");
       this.ioTConnection = connection;
     } catch (err) {
-      logger.error("Error connecting to IoT Core", { err });
+      this.logger.error("Error connecting to IoT Core", { err });
       throw err;
     }
   };
@@ -153,43 +148,38 @@ class Itinerary {
    * @returns {Route}
    */
   calculateRoute = async (waypoints) => {
+    const departureMarker = waypoints[0];
+    const destinationMarker = waypoints[waypoints.length - 1];
     const commandInput = {
       CalculatorName: process.env.ROUTE_CALCULATOR_NAME,
       TravelMode: "Car",
       IncludeLegGeometry: true,
+      DeparturePosition: [departureMarker.lng, departureMarker.lat],
+      DestinationPosition: [destinationMarker.lng, destinationMarker.lat],
     };
-    const commands = [];
-    waypoints.forEach((point, idx) => {
-      if (idx === waypoints.length - 1) return;
 
-      return commands.push(
-        locationClient.send(
-          new CalculateRouteCommand({
-            ...commandInput,
-            DeparturePosition: [point.lng, point.lat],
-            DestinationPosition: [
-              waypoints[idx + 1].lng,
-              waypoints[idx + 1].lat,
-            ],
-          })
-        )
-      );
-    });
+    if (waypoints.length > 2) {
+      const midWaypoints = waypoints.slice(1, -1);
+      commandInput.WaypointPositions = midWaypoints.map(({ lng, lat }) => [
+        lng,
+        lat,
+      ]);
+    }
 
     try {
-      /** @type {Promise<import('@aws-sdk/client-location').CalculateRouteCommandOutput[]>} */
-      const routes = await Promise.all(commands);
+      /** @type {Promise<import('@aws-sdk/client-location').CalculateRouteCommandOutput>} */
+      const result = await locationClient.send(
+        new CalculateRouteCommand(commandInput)
+      );
+      console.log(result);
 
-      this.routes = routes;
-      this.legs = routes.map((route) => new RouteLeg(route));
+      this.legs = result.Legs.map((leg) => new RouteLeg(leg));
       // Total distance in kilometers
-      this.totalDistance = this.legs.reduce(function (distance, obj) {
-        return distance + (obj.totalDistance || 0);
-      }, 0);
+      this.totalDistance = result.Summary?.Distance;
       this.distanceLeft = this.totalDistance;
       this.distanceCovered = 0;
     } catch (err) {
-      logger.error(`Error calculating route: ${err}`);
+      this.logger.error(`Error calculating route: ${err}`);
       throw err;
     }
   };
@@ -205,7 +195,6 @@ class Itinerary {
     );
     this.hasNextStep = true;
 
-    // TODO: publish update w/ first location
     this.publishUpdate(this.legs[0].startPosition);
     while (this.hasNextStep) {
       await this.makeStep();
@@ -218,7 +207,7 @@ class Itinerary {
     if (this.distanceLeft <= this.stepDistance) {
       this.hasNextStep = false;
       this.publishUpdate(this.legs[this.legs.length - 1].endPosition);
-      logger.warn("Route completed");
+      this.logger.warn("Route completed");
       return;
     }
 
@@ -230,10 +219,10 @@ class Itinerary {
       this.publishUpdate(nextPoint);
       this.distanceCovered += this.stepDistance;
       this.distanceLeft -= this.stepDistance;
-      logger.info(
+      this.logger.info(
         `Update sent to Iot Core, distance covered: ${this.distanceCovered} - left: ${this.distanceLeft}`
       );
-      logger.debug({
+      this.logger.debug({
         routeLegIdx: this.currentLegIdx,
         currentStep: leg.currentStep,
         distanceLeft: this.distanceLeft,
@@ -251,7 +240,7 @@ class Itinerary {
         // We have reached the end of the route
         this.hasNextStep = false;
         this.publishUpdate(this.legs[this.legs.length - 1].endPosition);
-        logger.warn("Route completed");
+        this.logger.warn("Route completed");
         return;
       }
     }
@@ -260,7 +249,7 @@ class Itinerary {
   stop = async () => {
     this.hasNextStep = false;
     this.ioTConnection.disconnect();
-    logger.info("Disconnected from IoT Core");
+    this.logger.info("Disconnected from IoT Core");
   };
 }
 

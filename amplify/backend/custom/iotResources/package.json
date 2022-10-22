@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "@aws-amplify/cli-extensibility-helper": "^2.0.0",
-    "@aws-cdk/core": "~1.156.0",
-    "@aws-cdk/aws-iam": "~1.156.0",
-    "@aws-cdk/aws-iot": "~1.156.0",
-    "@aws-cdk/aws-iot-actions": "~1.156.0",
-    "@aws-cdk/aws-lambda": "~1.156.0"
+    "@aws-cdk/core": "^1.177.0",
+    "@aws-cdk/aws-iam": "^1.177.0",
+    "@aws-cdk/aws-iot": "^1.177.0",
+    "@aws-cdk/aws-iot-actions": "^1.177.0",
+    "@aws-cdk/aws-lambda": "^1.177.0"
   },
   "devDependencies": {
     "typescript": "^4.2.4"

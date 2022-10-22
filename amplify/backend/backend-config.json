@@ -1,6 +1,6 @@
 {
   "auth": {
-    "awssupplychaindemo6b91e579": {
+    "locationworkshop44c90446": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -28,7 +28,7 @@
     }
   },
   "geo": {
-    "supplychainmap": {
+    "workshopMap": {
       "isDefault": true,
       "providerPlugin": "awscloudformation",
       "service": "Map",
@@ -37,14 +37,14 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "awssupplychaindemo6b91e579",
+          "resourceName": "locationworkshop44c90446",
           "attributes": [
             "UserPoolId"
           ]
         }
       ]
     },
-    "supplychainplace": {
+    "workshopPlaces": {
       "isDefault": true,
       "providerPlugin": "awscloudformation",
       "service": "PlaceIndex",
@@ -54,7 +54,7 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "awssupplychaindemo6b91e579",
+          "resourceName": "locationworkshop44c90446",
           "attributes": [
             "UserPoolId"
           ]
@@ -63,7 +63,7 @@
     }
   },
   "custom": {
-    "customLocation": {
+    "locationResources": {
       "service": "customCDK",
       "providerPlugin": "awscloudformation"
     },
@@ -85,13 +85,13 @@
     }
   },
   "api": {
-    "awssupplychaindemo": {
+    "locationworkshop": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "awssupplychaindemo6b91e579",
+          "resourceName": "locationworkshop44c90446",
           "attributes": [
             "UserPoolId"
           ]
@@ -102,7 +102,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authawssupplychaindemo6b91e579"
+              "userPoolId": "authlocationworkshop44c90446"
             }
           },
           "additionalAuthenticationProviders": []
@@ -111,10 +111,19 @@
     }
   },
   "function": {
-    "awssupplychaindemopowertools": {
+    "routeOptimizerFn": {
+      "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "LambdaLayer",
-      "build": true
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "locationworkshop",
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ]
+        }
+      ]
     },
     "deviceSimulatorFn": {
       "build": true,
@@ -123,37 +132,9 @@
       "dependsOn": [
         {
           "category": "api",
-          "resourceName": "awssupplychaindemo",
+          "resourceName": "locationworkshop",
           "attributes": [
             "GraphQLAPIIdOutput"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "awssupplychaindemopowertools",
-          "attributes": [
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "routeOptimizerFn": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "awssupplychaindemo",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "awssupplychaindemopowertools",
-          "attributes": [
-            "Arn"
           ]
         }
       ]
@@ -162,15 +143,7 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "awssupplychaindemopowertools",
-          "attributes": [
-            "Arn"
-          ]
-        }
-      ]
+      "dependsOn": []
     },
     "startItineraryFn": {
       "build": true,
@@ -186,16 +159,9 @@
         },
         {
           "category": "api",
-          "resourceName": "awssupplychaindemo",
+          "resourceName": "locationworkshop",
           "attributes": [
             "GraphQLAPIIdOutput"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "awssupplychaindemopowertools",
-          "attributes": [
-            "Arn"
           ]
         }
       ]
@@ -204,15 +170,7 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "awssupplychaindemopowertools",
-          "attributes": [
-            "Arn"
-          ]
-        }
-      ]
+      "dependsOn": []
     }
   }
 }

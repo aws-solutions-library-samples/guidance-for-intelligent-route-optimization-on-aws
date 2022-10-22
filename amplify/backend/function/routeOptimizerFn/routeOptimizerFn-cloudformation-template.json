@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"9.0.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.3.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -19,16 +19,9 @@
     "routeCalculatorName": {
       "Type": "String"
     },
-    "powertoolsServiceName": {
-      "Type": "String"
-    },
-    "apiawssupplychaindemoGraphQLAPIIdOutput": {
+    "apilocationworkshopGraphQLAPIIdOutput": {
       "Type": "String",
-      "Default": "apiawssupplychaindemoGraphQLAPIIdOutput"
-    },
-    "functionawssupplychaindemopowertoolsArn": {
-      "Type": "String",
-      "Default": "functionawssupplychaindemopowertoolsArn"
+      "Default": "apilocationworkshopGraphQLAPIIdOutput"
     }
   },
   "Conditions": {
@@ -84,12 +77,12 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME": {
+            "API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME": {
               "Fn::ImportValue": {
-                "Fn::Sub": "${apiawssupplychaindemoGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
+                "Fn::Sub": "${apilocationworkshopGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
               }
             },
-            "API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_ARN": {
+            "API_LOCATIONWORKSHOP_ITINERARYTABLE_ARN": {
               "Fn::Join": [
                 "",
                 [
@@ -104,20 +97,17 @@
                   ":table/",
                   {
                     "Fn::ImportValue": {
-                      "Fn::Sub": "${apiawssupplychaindemoGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
+                      "Fn::Sub": "${apilocationworkshopGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
                     }
                   }
                 ]
               ]
             },
-            "API_AWSSUPPLYCHAINDEMO_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apiawssupplychaindemoGraphQLAPIIdOutput"
+            "API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apilocationworkshopGraphQLAPIIdOutput"
             },
             "ROUTE_CALCULATOR_NAME": {
               "Ref": "routeCalculatorName"
-            },
-            "POWERTOOLS_SERVICE_NAME": {
-              "Ref": "powertoolsServiceName"
             }
           }
         },
@@ -129,9 +119,7 @@
         },
         "Runtime": "nodejs14.x",
         "Layers": [
-          {
-            "Ref": "functionawssupplychaindemopowertoolsArn"
-          }
+          "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
         ],
         "Timeout": 25
       }
@@ -142,12 +130,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "awssupplychaindemoLambdaRole31d97691",
+            "locationworkshopLambdaRole62f42ece",
             {
               "Fn::Join": [
                 "",
                 [
-                  "awssupplychaindemoLambdaRole31d97691",
+                  "locationworkshopLambdaRole62f42ece",
                   "-",
                   {
                     "Ref": "env"
@@ -261,7 +249,7 @@
                       ":table/",
                       {
                         "Fn::ImportValue": {
-                          "Fn::Sub": "${apiawssupplychaindemoGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
+                          "Fn::Sub": "${apilocationworkshopGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
                         }
                       }
                     ]
@@ -282,7 +270,7 @@
                       ":table/",
                       {
                         "Fn::ImportValue": {
-                          "Fn::Sub": "${apiawssupplychaindemoGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
+                          "Fn::Sub": "${apilocationworkshopGraphQLAPIIdOutput}:GetAtt:ItineraryTable:Name"
                         }
                       },
                       "/index/*"
@@ -307,7 +295,9 @@
                 "geo:CalculateRouteMatrix"
               ],
               "Resource": [
-                "arn:aws:geo:eu-west-1:536254204126:route-calculator/routecalculator_supplychain"
+                {
+                  "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_location_workshop"
+                }
               ],
               "Effect": "Allow"
             }

@@ -1,21 +1,14 @@
 {
   "lambdaLayers": [
     {
-      "type": "ProjectLayer",
-      "resourceName": "awssupplychaindemopowertools",
-      "env": "dev",
-      "version": "Always choose latest version",
-      "isLatestVersionSelected": true
+      "type": "ExternalLayer",
+      "arn": "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
     }
   ],
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "trackerName",
       "environmentVariableName": "TRACKER_NAME"
-    },
-    {
-      "cloudFormationParameterName": "powertoolsServiceName",
-      "environmentVariableName": "POWERTOOLS_SERVICE_NAME"
     }
   ]
 }

@@ -4,9 +4,9 @@ import { Auth } from "@aws-amplify/auth";
 import { AmazonLocationServiceMapStyle, Geo } from "@aws-amplify/geo";
 import {
   CalculateRouteCommand,
+  CalculateRouteCommandInput,
   LocationClient,
 } from "@aws-sdk/client-location";
-import type { CalculateRouteCommandOutput } from "@aws-sdk/client-location";
 import { featureCollection, lineString, point } from "@turf/helpers";
 import combine from "@turf/combine";
 import bbox from "@turf/bbox";
@@ -311,8 +311,8 @@ const getLocationClient = async () => {
   return client;
 };
 
-const commandInput = {
-  CalculatorName: "routecalculator_supplychain",
+const commandInput: Partial<CalculateRouteCommandInput> = {
+  CalculatorName: "routecalculator_location_workshop",
   TravelMode: "Car",
   IncludeLegGeometry: true,
 };
@@ -336,39 +336,38 @@ export type RoutePathResult = {
 
 const getRoutePath = async (markers: Marker[]): Promise<RoutePathResult> => {
   const client = await getLocationClient();
-  const commands: Promise<any>[] = [];
-  markers.forEach((marker, idx) => {
-    if (idx === markers.length - 1) return;
 
-    return commands.push(
-      client.send(
-        new CalculateRouteCommand({
-          ...commandInput,
-          DeparturePosition: [marker.point.lng, marker.point.lat],
-          DestinationPosition: [
-            markers[idx + 1].point.lng,
-            markers[idx + 1].point.lat,
-          ],
-        })
-      )
+  const departureMarker = markers[0];
+  commandInput.DeparturePosition = [
+    departureMarker.point.lng,
+    departureMarker.point.lat,
+  ];
+  const destinationMarker = markers[markers.length - 1];
+  commandInput.DestinationPosition = [
+    destinationMarker.point.lng,
+    destinationMarker.point.lat,
+  ];
+
+  if (markers.length > 2) {
+    const waypoints = markers.slice(1, -1);
+    commandInput.WaypointPositions = waypoints.map(
+      ({ point: { lng, lat } }) => [lng, lat]
     );
-  });
+  }
 
-  const results: CalculateRouteCommandOutput[] = await Promise.all(commands);
+  const result = await client.send(
+    new CalculateRouteCommand(commandInput as CalculateRouteCommandInput)
+  );
 
-  const distance = results.reduce(function (distance, obj) {
-    return distance + (obj.Summary?.Distance || 0);
-  }, 0);
-  const duration = results.reduce(function (duration, obj) {
-    return duration + (obj.Summary?.DurationSeconds || 0);
-  }, 0);
+  const distance = result.Summary?.Distance || 0;
+  const duration = result.Summary?.DurationSeconds || 0;
+
+  if (!result.Legs)
+    throw new Error("Unable to load intinerary geometry for legs");
 
   const routeFeatureCollection = featureCollection([
-    ...results.map((result) => {
-      const { Legs: legs } = result;
-      if (legs === undefined || legs.length === 0)
-        throw new Error("No route found");
-      return lineString(legs[0].Geometry?.LineString as Position[]);
+    ...result.Legs.map((leg) => {
+      return lineString(leg.Geometry?.LineString as Position[]);
     }),
   ]);
 

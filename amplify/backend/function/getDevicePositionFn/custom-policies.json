@@ -6,7 +6,7 @@
     ],
     "Resource": [
       {
-        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:tracker/tracker_supplychain"
+        "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:tracker/tracker_location_workshop"
       }
     ]
   }

@@ -17,14 +17,14 @@ export class cdkStack extends cdk.Stack {
     });
     /* AWS CDK code goes here - learn more: https://docs.aws.amazon.com/cdk/latest/guide/home.html */
 
-    new location.CfnRouteCalculator(this, "AWSSupplyChainDemoRouteCalculator", {
-      calculatorName: "routecalculator_supplychain",
+    new location.CfnRouteCalculator(this, "route-calculator", {
+      calculatorName: "routecalculator_location_workshop",
       dataSource: "Here",
-      description: "Route Calculator for the AWS Supply Chain Demo",
+      description: "Location Workshop Route Calculator",
     });
 
     new location.CfnTracker(this, "Tracker", {
-      trackerName: "tracker_supplychain",
+      trackerName: "tracker_location_workshop",
       positionFiltering: "AccuracyBased",
     });
   }

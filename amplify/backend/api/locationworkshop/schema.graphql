@@ -17,6 +17,7 @@ type Itinerary
   date: AWSDate!
   optimized: Boolean! @default(value: "false")
   hasStarted: Boolean! @default(value: "false")
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
   type: String!
     @index(
       name: "itinerariesByDate"

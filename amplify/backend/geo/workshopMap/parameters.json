@@ -5,8 +5,7 @@
   "unauthRoleName": {
     "Ref": "UnauthRoleName"
   },
-  "indexName": "supplychainplace",
-  "dataProvider": "Here",
-  "dataSourceIntendedUse": "Storage",
+  "mapName": "workshopMap",
+  "mapStyle": "VectorHereExplore",
   "isDefault": true
 }

@@ -1,13 +1,12 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-	API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME
-	API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_ARN
-	API_AWSSUPPLYCHAINDEMO_GRAPHQLAPIIDOUTPUT
+	API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME
+	API_LOCATIONWORKSHOP_ITINERARYTABLE_ARN
+	API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT
 	ROUTE_CALCULATOR_NAME
-	POWERTOOLS_SERVICE_NAME
 Amplify Params - DO NOT EDIT */
-const { logger } = require("/opt/powertools");
+
 const {
   DynamoDBClient,
   GetItemCommand,
@@ -18,9 +17,11 @@ const {
   LocationClient,
   CalculateRouteMatrixCommand,
 } = require("@aws-sdk/client-location");
+const { Logger } = require("@aws-lambda-powertools/logger");
 
 const dynamoDBClient = new DynamoDBClient();
 const locationClient = new LocationClient();
+const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 
 class ItineraryAlreadyStarted extends Error {
   constructor(message) {
@@ -50,13 +51,12 @@ exports.handler = async (event) => {
   logger.debug("event", { event });
 
   const itineraryId = event.arguments.id;
-
   let waypoints = [];
   let markers;
   try {
     const { Item: itinerary } = await dynamoDBClient.send(
       new GetItemCommand({
-        TableName: process.env.API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME,
+        TableName: process.env.API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME,
         Key: marshall({
           id: itineraryId,
         }),
@@ -101,7 +101,6 @@ exports.handler = async (event) => {
         body: "Itinerary has less than 3 points",
       };
     }
-
     logger.error(`Error getting itinerary: ${err}`);
     return {
       statusCode: 500,
@@ -158,7 +157,7 @@ exports.handler = async (event) => {
   try {
     const { Attributes: updatedItinerary } = await dynamoDBClient.send(
       new UpdateItemCommand({
-        TableName: process.env.API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME,
+        TableName: process.env.API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME,
         Key: marshall({
           id: itineraryId,
         }),

@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
-        "awssupplychaindemo6b91e579": {
+        "locationworkshop44c90446": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -11,35 +11,32 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "geo": {
-        "supplychainmap": {
+        "workshopMap": {
             "Name": "string",
             "Style": "string",
             "Region": "string",
             "Arn": "string"
         },
-        "supplychainplace": {
+        "workshopPlaces": {
             "Name": "string",
             "Region": "string",
             "Arn": "string"
         }
     },
     "api": {
-        "awssupplychaindemo": {
+        "locationworkshop": {
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
         }
     },
     "function": {
-        "awssupplychaindemopowertools": {
-            "Arn": "string"
-        },
-        "deviceSimulatorFn": {
+        "routeOptimizerFn": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "routeOptimizerFn": {
+        "deviceSimulatorFn": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

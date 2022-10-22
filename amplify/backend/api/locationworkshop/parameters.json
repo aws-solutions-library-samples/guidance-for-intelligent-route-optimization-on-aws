@@ -1,10 +1,10 @@
 {
-  "AppSyncApiName": "awssupplychaindemo",
+  "AppSyncApiName": "locationworkshop",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authawssupplychaindemo6b91e579",
+      "authlocationworkshop44c90446",
       "Outputs.UserPoolId"
     ]
   }

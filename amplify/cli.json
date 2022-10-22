@@ -12,7 +12,12 @@
       "suppressschemamigrationprompt": true,
       "securityenhancementnotification": false,
       "showfieldauthnotification": false,
-      "usesubusernamefordefaultidentityclaim": true
+      "usesubusernamefordefaultidentityclaim": true,
+      "usefieldnameforprimarykeyconnectionfield": false,
+      "enableautoindexquerynames": false,
+      "respectprimarykeyattributesonconnectionfield": false,
+      "shoulddeepmergedirectiveconfigdefaults": false,
+      "populateownerfieldforstaticgroupauth": false
     },
     "frontend-ios": {
       "enablexcodeintegration": true

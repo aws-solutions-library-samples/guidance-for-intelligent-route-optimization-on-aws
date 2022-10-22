@@ -1,13 +1,35 @@
 /* Amplify Params - DO NOT EDIT
+	API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT
+	API_LOCATIONWORKSHOP_ITINERARYTABLE_ARN
+	API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME
 	ENV
-	REGION
 	FUNCTION_DEVICESIMULATORFN_NAME
-	API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME
-	API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_ARN
-	API_AWSSUPPLYCHAINDEMO_GRAPHQLAPIIDOUTPUT
-	POWERTOOLS_SERVICE_NAME
+	REGION
 Amplify Params - DO NOT EDIT */
-const { logger } = require("/opt/powertools");
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async (event) => {
+  console.log(`EVENT: ${JSON.stringify(event)}`);
+  return {
+    statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    //  headers: {
+    //      "Access-Control-Allow-Origin": "*",
+    //      "Access-Control-Allow-Headers": "*"
+    //  },
+    body: JSON.stringify("Hello from Lambda!"),
+  };
+};
+/* Amplify Params - DO NOT EDIT
+	ENV
+  REGION
+  FUNCTION_DEVICESIMULATORFN_NAME
+  API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT
+  API_LOCATIONWORKSHOP_ITINERARYTABLE_ARN
+  API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME
+Amplify Params - DO NOT EDIT */
 const {
   DynamoDBClient,
   GetItemCommand,
@@ -15,8 +37,7 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-// TODO: see if we can use msgpack
-// const { encode } = require("@msgpack/msgpack");
+const { Logger } = require("@aws-lambda-powertools/logger");
 
 class ItineraryAlreadyStarted extends Error {
   constructor(message) {
@@ -34,6 +55,7 @@ class ItineraryNotOptimizedError extends Error {
 
 const dynamoDBClient = new DynamoDBClient();
 const lambdaClient = new LambdaClient();
+const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 
 /**
  * @type {import('@types/aws-lambda').AppSyncResolverHandler}
@@ -47,7 +69,7 @@ exports.handler = async (event) => {
   try {
     const { Item: itinerary } = await dynamoDBClient.send(
       new GetItemCommand({
-        TableName: process.env.API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME,
+        TableName: process.env.API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME,
         Key: marshall({
           id: itineraryId,
         }),
@@ -120,7 +142,7 @@ exports.handler = async (event) => {
   try {
     await dynamoDBClient.send(
       new UpdateItemCommand({
-        TableName: process.env.API_AWSSUPPLYCHAINDEMO_ITINERARYTABLE_NAME,
+        TableName: process.env.API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME,
         Key: marshall({
           id: itineraryId,
         }),

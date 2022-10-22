@@ -8,21 +8,14 @@
   },
   "lambdaLayers": [
     {
-      "type": "ProjectLayer",
-      "resourceName": "awssupplychaindemopowertools",
-      "env": "dev",
-      "version": "Always choose latest version",
-      "isLatestVersionSelected": true
+      "type": "ExternalLayer",
+      "arn": "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
     }
   ],
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "routeCalculatorName",
       "environmentVariableName": "ROUTE_CALCULATOR_NAME"
-    },
-    {
-      "cloudFormationParameterName": "powertoolsServiceName",
-      "environmentVariableName": "POWERTOOLS_SERVICE_NAME"
     }
   ]
 }
