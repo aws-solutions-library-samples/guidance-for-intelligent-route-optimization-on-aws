@@ -5,7 +5,7 @@ import { useSelector } from "@xstate/react";
 import { Logger } from "@aws-amplify/core";
 import { View, Flex, Button } from "@aws-amplify/ui-react";
 import { useParams } from "react-router-dom";
-import type { Place } from "@aws-amplify/geo";
+import { Place } from "@aws-amplify/geo";
 
 import Input from "./Input";
 import CustomControl from "./CustomControl";
@@ -14,7 +14,7 @@ import MarkerItemLine from "./MarkerItemLine";
 import ItineraryWhenText from "./ItineraryWhenText";
 
 import { MapContext } from "../Map";
-import type { MarkerItem } from "../Map";
+import { MarkerItem } from "../Map";
 
 const logger = new Logger(
   "RoutingMenu",

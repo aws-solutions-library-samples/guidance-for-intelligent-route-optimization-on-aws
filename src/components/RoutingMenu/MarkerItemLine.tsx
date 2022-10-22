@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Flex, Text, Button, useTheme } from "@aws-amplify/ui-react";
 
 import { MapContext } from "../Map";
-import type { MarkerItem } from "../Map";
+import { MarkerItem } from "../Map";
 import { FiMinus } from "react-icons/fi";
 
 type MarkerItemLineProps = {

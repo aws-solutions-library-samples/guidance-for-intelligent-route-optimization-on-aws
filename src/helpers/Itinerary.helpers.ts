@@ -10,13 +10,8 @@ import {
 import { featureCollection, lineString, point } from "@turf/helpers";
 import combine from "@turf/combine";
 import bbox from "@turf/bbox";
-import type {
-  Position,
-  FeatureCollection,
-  Properties,
-  BBox,
-} from "@turf/helpers";
-import type { ICredentials } from "@aws-amplify/core";
+import { Position, FeatureCollection, Properties, BBox } from "@turf/helpers";
+import { ICredentials } from "@aws-amplify/core";
 
 import {
   getItinerary as getItineraryQ,

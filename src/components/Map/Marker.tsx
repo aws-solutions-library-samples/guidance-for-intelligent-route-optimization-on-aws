@@ -1,9 +1,9 @@
 import React from "react";
 import { Marker as MapMarker } from "react-map-gl";
-import type { MarkerDragEvent } from "react-map-gl";
+import { MarkerDragEvent } from "react-map-gl";
 
 import PinIcon from "./PinIcon";
-import type { MarkerItem } from "./Map.state-machine";
+import { MarkerItem } from "./Map.state-machine";
 
 type MarkerProps = {
   children?: React.ReactNode;

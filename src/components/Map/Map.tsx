@@ -4,14 +4,10 @@ import { useParams } from "react-router-dom";
 import { MapView } from "@aws-amplify/ui-react";
 import { Logger } from "@aws-amplify/core";
 import { Layer, MapRef, NavigationControl, Source } from "react-map-gl";
-import type {
-  MapLayerMouseEvent,
-  MarkerDragEvent,
-  LayerProps,
-} from "react-map-gl";
+import { MapLayerMouseEvent, MarkerDragEvent, LayerProps } from "react-map-gl";
 
 import { MapContext } from "../Map";
-import type { MarkerItem, ItineraryDate } from "../Map";
+import { MarkerItem, ItineraryDate } from "../Map";
 import RoutingMenu from "../RoutingMenu";
 import Marker from "./Marker";
 import { getMarkersBbox } from "../../helpers/Itinerary.helpers";

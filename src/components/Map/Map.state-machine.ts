@@ -14,7 +14,7 @@ import {
   trackItinerary,
   updateItinerary,
 } from "../../helpers/Itinerary.helpers";
-import type { RoutePathResult } from "../../helpers/Itinerary.helpers";
+import { RoutePathResult } from "../../helpers/Itinerary.helpers";
 import { Itinerary } from "../../API";
 
 const logger = new Logger(

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hub } from "aws-amplify";
-import type { HubCallback } from "@aws-amplify/core";
+import { HubCallback } from "@aws-amplify/core";
 import { Flex, Alert, useTheme, Button } from "@aws-amplify/ui-react";
 import useWindowDimensions from "../../hooks/use-windows-dimensions.hook";
 
