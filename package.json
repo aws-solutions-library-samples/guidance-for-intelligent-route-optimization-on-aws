@@ -1,15 +1,13 @@
 {
   "name": "aws-intelligent-route-optimization-tracking",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.5.0",
   "dependencies": {
     "@aws-amplify/ui-react": "^3.1.0",
-    "@aws-sdk/client-location": "^3.131.0",
     "@floating-ui/react-dom": "^0.7.2",
     "@turf/bbox": "^6.5.0",
     "@turf/combine": "^6.5.0",
     "@xstate/react": "^3.0.0",
-    "aws-amplify": "^4.3.27",
+    "aws-amplify": "^4.3.29",
     "date-fns": "^2.28.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
@@ -17,45 +15,20 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.3.0",
-    "use-debounce": "^8.0.1",
-    "web-vitals": "^2.1.4"
+    "use-debounce": "^8.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
     "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.0",
-    "react-script": "^2.0.5",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.6.3"
-  },
-  "overrides": {
-    "react-scripts": {
-      "nth-check": "2.1.1"
-    }
+    "@types/react-dom": "^18.0.6",
+    "typescript": "^4.6.3",
+    "@vitejs/plugin-react": "^2.0.0",
+    "vite": "^3.0.0"
   }
 }
