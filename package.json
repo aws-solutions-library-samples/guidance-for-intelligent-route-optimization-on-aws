@@ -12,8 +12,8 @@
     "aws-amplify": "^4.3.27",
     "date-fns": "^2.28.0",
     "normalize.css": "^8.0.1",
-    "react-day-picker": "^8.0.7",
     "react": "^18.2.0",
+    "react-day-picker": "^8.0.7",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.3.0",
@@ -45,11 +45,12 @@
     ]
   },
   "devDependencies": {
-    "@types/react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
-    "@types/react": "^17.0.44",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.0",
+    "react-script": "^2.0.5",
+    "react-scripts": "^5.0.1",
     "typescript": "^4.6.3"
   },
   "overrides": {

@@ -1,16 +1,22 @@
-import React, { useMemo } from "react";
-import { Marker as MapMarker } from "react-map-gl";
+import React, { useMemo, useContext } from "react";
+import { useSelector } from "@xstate/react";
+import { Marker } from "react-map-gl";
 
+import { MapContext } from "../Map";
 import { Coords } from "../../models";
 
-type MarkerProps = {
+type DeviceMarkerProps = {
   children?: React.ReactNode;
-  location: Coords;
 };
 
-const Marker: React.FC<MarkerProps> = ({ location }) => {
+const DeviceMarker: React.FC<DeviceMarkerProps> = () => {
   const iconSize = 24;
   const color = "red";
+  const service = useContext(MapContext);
+  const deviceLocation: Coords[] = useSelector(
+    service,
+    (state: any) => state?.context?.deviceLocation
+  );
 
   const icon = useMemo(() => {
     return (
@@ -29,11 +35,13 @@ const Marker: React.FC<MarkerProps> = ({ location }) => {
     );
   }, [color, iconSize]);
 
+  if (deviceLocation.length === 0) return null;
+
   return (
-    <MapMarker longitude={location.lng} latitude={location.lat}>
+    <Marker longitude={deviceLocation[0].lng} latitude={deviceLocation[0].lat}>
       {icon}
-    </MapMarker>
+    </Marker>
   );
 };
 
-export default Marker;
+export default DeviceMarker;
