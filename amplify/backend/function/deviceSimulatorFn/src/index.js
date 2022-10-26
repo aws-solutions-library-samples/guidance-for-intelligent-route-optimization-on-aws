@@ -14,6 +14,7 @@ const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 const THING_ENDPOINT = "a1cvae90v4lr6u-ats.iot.eu-west-1.amazonaws.com";
 const CLIENT_ID = "trackerThing";
 const IOT_TOPIC = "iot/trackedAssets";
+const SECRET_ID = "locationworkshop";
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -30,7 +31,7 @@ exports.handler = async (event) => {
     waypointsNo: waypoints.length,
   });
 
-  const itinerary = new Itinerary(itineraryId, logger);
+  const itinerary = new Itinerary(itineraryId, logger, SECRET_ID);
   await itinerary.connect(CLIENT_ID, THING_ENDPOINT, IOT_TOPIC);
   await itinerary.calculateRoute(waypoints);
 

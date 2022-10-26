@@ -5,6 +5,10 @@ const {
 } = require("@aws-sdk/client-location");
 const { lineString } = require("@turf/helpers");
 const along = require("@turf/along").default;
+const {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} = require("@aws-sdk/client-secrets-manager");
 
 const locationClient = new LocationClient();
 
@@ -13,19 +17,20 @@ const locationClient = new LocationClient();
  *
  * @param {string} clientId
  * @param {string} endpoint
+ * @param {string} cert
+ * @param {string} key
  *
  * @returns {mqtt.Client}
  */
-const buildConnection = (clientId, endpoint) => {
-  let config_builder =
-    iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder_from_path(
-      `${__dirname}/certs/certificate.pem.crt`,
-      `${__dirname}/certs/private.pem.key`
-    );
-  config_builder.with_clean_session(false);
-  config_builder.with_client_id(clientId);
-  config_builder.with_endpoint(endpoint);
-  const config = config_builder.build();
+const buildConnection = (clientId, endpoint, cert, key) => {
+  let configBuilder = iot.AwsIotMqttConnectionConfigBuilder.new_mtls_builder(
+    cert,
+    key
+  );
+  configBuilder.with_clean_session(false);
+  configBuilder.with_client_id(clientId);
+  configBuilder.with_endpoint(endpoint);
+  const config = configBuilder.build();
   const client = new mqtt.MqttClient();
 
   return client.new_connection(config);
@@ -61,7 +66,7 @@ class Itinerary {
    * @param {string} itineraryId
    * @param {import('@aws-lambda-powertools/logger').Logger} logger
    */
-  constructor(itineraryId, logger) {
+  constructor(itineraryId, logger, secretId) {
     this.id = itineraryId;
     this.logger = logger;
 
@@ -86,12 +91,45 @@ class Itinerary {
     this.currentLegIdx = 0;
     this.updateFrequency = -1;
     this.hasNextStep = false;
+
+    this.secretsManagerClient = new SecretsManagerClient({});
+    this.secretId = secretId;
   }
+
+  getCertAndKey = async () => {
+    if (!this.cert || !this.key) {
+      const secret = await this.secretsManagerClient.send(
+        new GetSecretValueCommand({
+          SecretId: this.secretId,
+        })
+      );
+      const { SecretString } = secret;
+      if (!SecretString) {
+        throw new Error("Could not find secret");
+      }
+      const { cert, keyPair } = JSON.parse(SecretString);
+
+      this.cert = cert;
+      this.key = keyPair;
+
+      if (!this.cert || !this.key) {
+        throw new Error("Could not find cert or key");
+      }
+
+      this.logger.info("Got cert and key from Secrets Manager");
+    }
+
+    return {
+      cert: this.cert,
+      key: this.key,
+    };
+  };
 
   connect = async (clientId, endpoint, topic) => {
     try {
       this.ioTtopic = topic;
-      const connection = buildConnection(clientId, endpoint);
+      const { cert, key } = await this.getCertAndKey();
+      const connection = buildConnection(clientId, endpoint, cert, key);
       this.logger.info("Connecting to IoT Core");
       await connection.connect();
       this.logger.info("Successfully connected to IoT Core");

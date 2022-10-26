@@ -1,7 +1,12 @@
 import { Hub, Logger } from "aws-amplify";
 import { API, GraphQLResult, graphqlOperation } from "@aws-amplify/api";
 import { Auth } from "@aws-amplify/auth";
-import { AmazonLocationServiceMapStyle, Geo } from "@aws-amplify/geo";
+import {
+  AmazonLocationServiceMapStyle,
+  Geo,
+  Place,
+  Coordinates,
+} from "@aws-amplify/geo";
 import {
   CalculateRouteCommand,
   CalculateRouteCommandInput,
@@ -44,6 +49,46 @@ const logger = new Logger(
   "Itinerary.helpers",
   process.env.NODE_ENV === "production" ? "INFO" : "DEBUG"
 );
+
+type MarkerPoint = {
+  lng: number;
+  lat: number;
+};
+
+type MarkerItem = {
+  point: MarkerPoint;
+  label: string;
+};
+
+const buildPlace = (place: Place) => {
+  const placeCoords = place?.geometry?.point;
+  const placeLabel = place?.label;
+  if (!placeCoords || !placeLabel) throw new Error("No place found");
+  const point: MarkerPoint = { lng: placeCoords[0], lat: placeCoords[1] };
+  return { point, label: placeLabel };
+};
+
+const addMarker = async (
+  coords: Coordinates,
+  label?: string
+): Promise<MarkerItem> => {
+  if (!label) {
+    const res = await Geo.searchByCoordinates(coords);
+    return buildPlace(res);
+  } else {
+    return { point: { lng: coords[0], lat: coords[1] }, label };
+  }
+};
+
+const getSuggestions = async (text: string, biasPosition: Coordinates) => {
+  if (text.trim() === "") return [];
+  const res = await Geo.searchByText(text, {
+    maxResults: 5,
+    biasPosition: biasPosition,
+  });
+
+  return res;
+};
 
 const getItineraries = async (future: boolean, nextToken?: string) => {
   // Default limit of items to return
@@ -429,6 +474,9 @@ const trackItinerary = async (id: string) => {
 };
 
 export {
+  addMarker,
+  buildPlace,
+  getSuggestions,
   getItineraries,
   deleteItinerary,
   saveItinerary,

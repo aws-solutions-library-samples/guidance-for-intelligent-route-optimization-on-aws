@@ -7,6 +7,9 @@ import { LngLat, ViewState } from "react-map-gl";
 import { isToday as isDateToday, compareAsc, startOfDay } from "date-fns";
 
 import {
+  addMarker,
+  buildPlace,
+  getSuggestions,
   getItinerary,
   getRoutePath,
   optimizeItinerary,
@@ -52,26 +55,6 @@ type MapContextType = {
   deviceLocation: Coordinates[];
 };
 
-const buildPlace = (place: Place) => {
-  const placeCoords = place?.geometry?.point;
-  const placeLabel = place?.label;
-  if (!placeCoords || !placeLabel) throw new Error("No place found");
-  const point: MarkerPoint = { lng: placeCoords[0], lat: placeCoords[1] };
-  return { point, label: placeLabel };
-};
-
-const addMarker = async (
-  coords: Coordinates,
-  label?: string
-): Promise<MarkerItem> => {
-  if (!label) {
-    const res = await Geo.searchByCoordinates(coords);
-    return buildPlace(res);
-  } else {
-    return { point: { lng: coords[0], lat: coords[1] }, label };
-  }
-};
-
 const removeMarker = async (markerIdx: number, markers: MarkerItem[]) => {
   markers.splice(markerIdx, 1);
   return markers;
@@ -86,16 +69,6 @@ const modifyMarkerAtIdx = async (
   const newPlace = buildPlace(res);
   markers[markerIdx] = newPlace;
   return markers;
-};
-
-const getSuggestions = async (text: string, biasPosition: Coordinates) => {
-  if (text.trim() === "") return [];
-  const res = await Geo.searchByText(text, {
-    maxResults: 5,
-    biasPosition: biasPosition,
-  });
-
-  return res;
 };
 
 const mapMachine = createMachine<MapContextType>(
