@@ -118,9 +118,6 @@
           ]
         },
         "Runtime": "nodejs14.x",
-        "Layers": [
-          "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
-        ],
         "Timeout": 25
       }
     },

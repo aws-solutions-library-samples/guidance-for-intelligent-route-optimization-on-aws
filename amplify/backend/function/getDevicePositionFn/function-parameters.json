@@ -1,10 +1,4 @@
 {
-  "lambdaLayers": [
-    {
-      "type": "ExternalLayer",
-      "arn": "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
-    }
-  ],
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "trackerName",

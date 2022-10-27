@@ -118,9 +118,6 @@
           ]
         },
         "Runtime": "nodejs14.x",
-        "Layers": [
-          "arn:aws:lambda:eu-west-1:094274105915:layer:AWSLambdaPowertoolsTypeScript:3"
-        ],
         "Timeout": 900
       }
     },
@@ -295,6 +292,17 @@
               "Resource": [
                 {
                   "Fn::Sub": "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_location_workshop"
+                }
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:locationworkshop"
                 }
               ],
               "Effect": "Allow"

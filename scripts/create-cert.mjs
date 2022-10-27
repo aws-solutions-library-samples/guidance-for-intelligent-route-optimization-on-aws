@@ -10,7 +10,7 @@ import {
   CreateSecretCommand,
 } from "@aws-sdk/client-secrets-manager";
 
-const SECRET_NAME = "locationworkshop/iot-cert";
+const SECRET_NAME = "locationworkshop";
 
 const iot = new IoTClient({});
 const secretsManager = new SecretsManagerClient({});

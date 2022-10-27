@@ -26,7 +26,7 @@ const Body: React.FC<BodyProps> = ({
   style,
   children,
 }) => {
-  const [error, setError] = useState<ErrorMessage | null>(null);
+  const [error, setError] = useState<ErrorMessage>();
   const { tokens } = useTheme();
   const navigate = useNavigate();
   const { height: windowHeight } = useWindowDimensions();
@@ -63,7 +63,7 @@ const Body: React.FC<BodyProps> = ({
             <Alert variation="error">{error.message}</Alert>
             <Button
               onClick={() => {
-                setError(null);
+                setError(undefined);
                 navigate(-1);
               }}
             >
