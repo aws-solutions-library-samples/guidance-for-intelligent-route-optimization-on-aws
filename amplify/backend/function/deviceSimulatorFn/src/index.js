@@ -11,7 +11,7 @@ const { Logger } = require("@aws-lambda-powertools/logger");
 
 const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 
-const THING_ENDPOINT = "a1cvae90v4lr6u-ats.iot.eu-west-1.amazonaws.com";
+const THING_ENDPOINT = "[some-id]-ats.iot.[region-name].amazonaws.com";
 const CLIENT_ID = "trackerThing";
 const IOT_TOPIC = "iot/trackedAssets";
 const SECRET_ID = "locationworkshop";
