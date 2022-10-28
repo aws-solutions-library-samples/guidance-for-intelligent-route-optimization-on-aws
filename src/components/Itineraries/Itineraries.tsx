@@ -33,7 +33,11 @@ const Itineraries: React.FC<ItinerariesProps> = () => {
   const [nextToken, setNextToken] = useState<string>();
 
   const loadItineraries = useCallback(
-    async (itineraries, nextToken?: string, future: boolean = true) => {
+    async (
+      itineraries: Itinerary[],
+      nextToken?: string,
+      future: boolean = true
+    ) => {
       const { itineraries: newItineraries, nextToken: newNextToken } =
         await getItineraries(future, nextToken);
       setItineraries([...itineraries, ...newItineraries]);
