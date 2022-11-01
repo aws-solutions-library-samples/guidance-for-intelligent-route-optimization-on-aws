@@ -42,12 +42,6 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "iotUpdateTrackerFn": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
         "startItineraryFn": {
             "Name": "string",
             "Arn": "string",

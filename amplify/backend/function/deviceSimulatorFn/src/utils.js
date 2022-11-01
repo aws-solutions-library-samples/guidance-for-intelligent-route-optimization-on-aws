@@ -142,15 +142,16 @@ class Itinerary {
 
   publishUpdate = async (location) => {
     const payload = {
-      deviceId: this.id,
+      deviceID: this.id,
       timestamp: new Date().getTime(),
-      location,
+      latitude: location[0],
+      longitude: location[1],
     };
 
     await this.ioTConnection.publish(
       this.ioTtopic,
       JSON.stringify({
-        payload,
+        ...payload,
       }),
       mqtt.QoS.AtMostOnce
     );
@@ -267,7 +268,6 @@ class Itinerary {
         nextPoint,
       });
 
-      // TODO: wait
       await new Promise((resolve) =>
         setTimeout(resolve, 1000 * this.updateFrequency)
       );

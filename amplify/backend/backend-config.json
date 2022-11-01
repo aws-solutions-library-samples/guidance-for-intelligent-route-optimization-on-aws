@@ -69,19 +69,7 @@
     },
     "iotResources": {
       "service": "customCDK",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "iotUpdateTrackerFn",
-          "attributes": [
-            "Name",
-            "Arn",
-            "Region",
-            "LambdaExecutionRole"
-          ]
-        }
-      ]
+      "providerPlugin": "awscloudformation"
     }
   },
   "api": {
@@ -138,12 +126,6 @@
           ]
         }
       ]
-    },
-    "iotUpdateTrackerFn": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
     },
     "startItineraryFn": {
       "build": true,

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Flex, Link as UiLink } from "@aws-amplify/ui-react";
 
-type MenuItemProps = {
+export type MenuItemProps = {
   children?: React.ReactNode;
   total: number;
   to: string;
@@ -24,4 +24,3 @@ const MenuItem: React.FC<MenuItemProps> = ({ total, to, label }) => {
 };
 
 export default MenuItem;
-export type { MenuItemProps };

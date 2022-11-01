@@ -169,7 +169,6 @@ Before continuing the CLI will ask you to input some values for environment vari
 Some Lambda function environment variables are missing values in this Amplify environment.
 ✔ Enter the missing environment variable value of ROUTE_CALCULATOR_NAME in routeOptimizerFn: · routecalculator_location_workshop
 ✔ Enter the missing environment variable value of ROUTE_CALCULATOR_NAME in deviceSimulatorFn: · routecalculator_location_workshop
-✔ Enter the missing environment variable value of TRACKER_NAME in iotUpdateTrackerFn: · tracker_location_workshop
 ✔ Enter the missing environment variable value of TRACKER_NAME in getDevicePositionFn: · tracker_location_workshop
 
 ⠏ Fetching updates to backend environment: dev from the cloud.✅ GraphQL schema compiled successfully.
@@ -203,8 +202,6 @@ Edit your schema at amplify/backend/api/awssupplychaindemo/schema.graphql or pla
 ├──────────┼──────────────────────────┼───────────┼───────────────────┤
 │ Function │ deviceSimulatorFn        │ Create    │ awscloudformation │
 ├──────────┼──────────────────────────┼───────────┼───────────────────┤
-│ Function │ iotUpdateTrackerFn       │ Create    │ awscloudformation │
-├──────────┼──────────────────────────┼───────────┼───────────────────┤
 │ Function │ startItineraryFn         │ Create    │ awscloudformation │
 ├──────────┼──────────────────────────┼───────────┼───────────────────┤
 │ Function │ getDevicePositionFn      │ Create    │ awscloudformation │
@@ -224,12 +221,6 @@ At the very last question Amplify CLI will ask you if you want to generate the c
 ? Do you want to generate code for your newly created GraphQL API No
 
 # Additional logs were removed for brevity
-```
-
-As last step before running the application, you need to run one last command that we need to run in order to allow IoT Core to invoke the Lambda function that processes the IoT Core events:
-
-```sh
-aws lambda add-permission --function-name iotUpdateTrackerFn-dev --statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
 ```
 
 When the backend is deployed, you can start the frontend application. Go to the [Run the app locally](#run-the-app-locally) section to learn how to run the frontend application locally.

@@ -1,8 +1,0 @@
-{
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "trackerName",
-      "environmentVariableName": "TRACKER_NAME"
-    }
-  ]
-}

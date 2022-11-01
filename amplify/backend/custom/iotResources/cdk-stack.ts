@@ -1,16 +1,14 @@
 import * as cdk from "@aws-cdk/core";
 import * as AmplifyHelpers from "@aws-amplify/cli-extensibility-helper";
-import { AmplifyDependentResourcesAttributes } from "../../types/amplify-dependent-resources-ref";
 import * as iot from "@aws-cdk/aws-iot";
-import * as actions from "@aws-cdk/aws-iot-actions";
-import * as lambda from "@aws-cdk/aws-lambda";
+import * as iam from "@aws-cdk/aws-iam";
 
 export class cdkStack extends cdk.Stack {
   constructor(
     scope: cdk.Construct,
     id: string,
     props?: cdk.StackProps,
-    amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps
+    _amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps
   ) {
     super(scope, id, props);
     /* Do not remove - Amplify CLI automatically injects the current deployment environment in this input parameter */
@@ -23,24 +21,6 @@ export class cdkStack extends cdk.Stack {
 
     // Identifier for the IoT Core Certificate, REPLACE THIS WITH YOUR CERTIFICATE ID
     const CERTIFICATE_ID = "[YOUR_CERTIFICATE_ID]";
-
-    // Access other Amplify Resources
-    const retVal: AmplifyDependentResourcesAttributes =
-      AmplifyHelpers.addResourceDependency(
-        this,
-        amplifyResourceProps.category,
-        amplifyResourceProps.resourceName,
-        [{ category: "function", resourceName: "iotUpdateTrackerFn" }]
-      );
-    // Get the Lambda Function reference
-    const iotUpdateTrackerArn = cdk.Fn.ref(
-      retVal.function.iotUpdateTrackerFn.Arn
-    );
-    const iotUpdateTrackerRef = lambda.Function.fromFunctionArn(
-      this,
-      "myFunction",
-      iotUpdateTrackerArn
-    );
 
     // Create an IoT Core Policy
     const policy = new iot.CfnPolicy(this, "Policy", {
@@ -97,13 +77,48 @@ export class cdkStack extends cdk.Stack {
     );
     thingPrincipalAttachment.addDependsOn(thing);
 
-    // Create an IoT Topic Rule that will trigger the Lambda Function
-    new iot.TopicRule(this, "TopicRule", {
-      topicRuleName: "assetTrackingRule",
-      sql: iot.IotSql.fromStringAsVer20160323(
-        `SELECT * FROM 'iot/trackedAssets'`
-      ),
-      actions: [new actions.LambdaFunctionAction(iotUpdateTrackerRef)],
+    // IAM Role for AWS IoT Core to publish to Location Service
+    const role = new iam.Role(this, "iot-tracker-role", {
+      assumedBy: new iam.ServicePrincipal("iot.amazonaws.com"),
+      description: "IAM Role that allows IoT Core to update a Tracker",
+      inlinePolicies: {
+        allowTracker: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              resources: [
+                `arn:aws:geo:${cdk.Stack.of(this).region}:${
+                  cdk.Stack.of(this).account
+                }:tracker/tracker_location_workshop-ok`,
+              ],
+              actions: ["geo:BatchUpdateDevicePosition"],
+            }),
+          ],
+        }),
+      },
+    });
+
+    // Create an IoT Topic Rule that will send the location updates to Location Service
+    const topicRule = new iot.CfnTopicRule(this, "TopicRule", {
+      ruleName: "assetTrackingRule",
+      topicRulePayload: {
+        sql: `SELECT * FROM 'iot/trackedAssets'`,
+        awsIotSqlVersion: "2016-03-23",
+        actions: [],
+      },
+    });
+
+    topicRule.addOverride("Properties.TopicRulePayload.Actions.0", {
+      Location: {
+        DeviceId: "${deviceID}",
+        Latitude: "${longitude}",
+        Longitude: "${latitude}",
+        RoleArn: role.roleArn,
+        Timestamp: {
+          Value: "${timestamp()}",
+          Unit: "MILLISECONDS",
+        },
+        TrackerName: "tracker_location_workshop",
+      },
     });
   }
 }
