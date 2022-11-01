@@ -1,3 +1,4 @@
+// @ts-ignore
 import { MapboxMap, IControl } from "react-map-gl";
 import { Logger } from "@aws-amplify/core";
 

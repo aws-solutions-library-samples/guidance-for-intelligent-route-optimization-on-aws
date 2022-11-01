@@ -1,6 +1,7 @@
 import React, { useContext, useState, cloneElement } from "react";
 import { createPortal } from "react-dom";
 import { useControl } from "react-map-gl";
+// @ts-ignore
 import { useSelector } from "@xstate/react";
 import { Logger } from "@aws-amplify/core";
 import { View, Flex, Button } from "@aws-amplify/ui-react";

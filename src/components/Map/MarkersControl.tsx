@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+// @ts-ignore
 import { useSelector } from "@xstate/react";
 import { MarkerDragEvent } from "react-map-gl";
 

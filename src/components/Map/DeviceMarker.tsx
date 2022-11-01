@@ -1,4 +1,5 @@
 import React, { useMemo, useContext } from "react";
+// @ts-ignore
 import { useSelector } from "@xstate/react";
 import { Marker } from "react-map-gl";
 

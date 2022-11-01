@@ -3,6 +3,7 @@ import { createMachine, assign } from "xstate";
 import { InterpreterFrom } from "xstate/lib/types";
 import { Geo, Place, Coordinates } from "@aws-amplify/geo";
 import { Logger } from "@aws-amplify/core";
+// @ts-ignore
 import { LngLat, ViewState } from "react-map-gl";
 import { isToday as isDateToday, compareAsc, startOfDay, parseISO } from "date-fns";
 

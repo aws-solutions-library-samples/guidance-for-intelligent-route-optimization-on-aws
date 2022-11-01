@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
+// @ts-ignore
 import { useSelector } from "@xstate/react";
+// @ts-ignore
 import { Source, Layer, LayerProps, useMap } from "react-map-gl";
 
 import { MapContext, MarkerItem } from "../Map";
