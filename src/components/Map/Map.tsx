@@ -58,15 +58,7 @@ const Map: React.FC<MapProps> = () => {
   const handleMapClick = (e: MapLayerMouseEvent) =>
     service.send("ADD_MARKER", { point: e.lngLat.toArray() });
 
-  return (
-    <MapView initialViewState={viewState} onClick={handleMapClick}>
-      <NavigationControl position="top-left" />
-      <RoutingMenu />
-      <DeviceMarker />
-      <MarkersControl />
-      <RouteControl />
-    </MapView>
-  );
+  return <>TODO: ✏️ Add Map here</>;
 };
 
 export default Map;

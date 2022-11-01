@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Hub, Logger } from "aws-amplify";
 import { API, GraphQLResult, graphqlOperation } from "@aws-amplify/api";
 import { Auth } from "@aws-amplify/auth";
@@ -72,155 +73,32 @@ const addMarker = async (
   coords: Coordinates,
   label?: string
 ): Promise<MarkerItem> => {
-  if (!label) {
-    const res = await Geo.searchByCoordinates(coords);
-    return buildPlace(res);
-  } else {
-    return { point: { lng: coords[0], lat: coords[1] }, label };
-  }
+  // TODO: ✏️ implement addMarker function here
 };
 
 const getSuggestions = async (text: string, biasPosition: Coordinates) => {
-  if (text.trim() === "") return [];
-  const res = await Geo.searchByText(text, {
-    maxResults: 5,
-    biasPosition: biasPosition,
-  });
-
-  return res;
+  // TODO: ✏️ implement getSuggestions function here
 };
 
-const getItineraries = async (future: boolean, nextToken?: string) => {
-  // Default limit of items to return
-  const limit = 2;
-
-  const load = async (
-    future: boolean,
-    limit: number,
-    full: boolean = true,
-    nextToken?: string
-  ) => {
-    const variables: ItinerariesByDateQueryVariables = {
-      limit: limit,
-      date: {
-        [future ? "ge" : "lt"]: new Date().toISOString().split("T")[0],
-      },
-      type: "itinerary",
-      sortDirection: ModelSortDirection.ASC,
-    };
-
-    let itineraries: Itinerary[] = [];
-    let isFirstQuery = true;
-    let nextPageNextToken: string | null | undefined = nextToken;
-
-    while ((nextPageNextToken || isFirstQuery) && itineraries.length < limit) {
-      isFirstQuery = false;
-
-      const currentVars: ItinerariesByDateQueryVariables = {
-        ...variables,
-      };
-      if (nextPageNextToken && nextPageNextToken !== "-1")
-        currentVars.nextToken = nextPageNextToken;
-      const op = graphqlOperation(itinerariesByDate, currentVars);
-      const res = (await API.graphql(
-        op
-      )) as GraphQLResult<ItinerariesByDateQuery>;
-
-      if (
-        !res.data ||
-        !res.data.hasOwnProperty("itinerariesByDate") ||
-        !res.data.itinerariesByDate?.hasOwnProperty("items") ||
-        !res.data.itinerariesByDate?.hasOwnProperty("nextToken")
-      ) {
-        throw new Error("Unable to load itineraries");
-      }
-
-      itineraries = itineraries.concat([
-        ...(res.data?.itinerariesByDate.items as Itinerary[]),
-      ]);
-      nextPageNextToken = res.data?.itinerariesByDate.nextToken;
-
-      if (!full) {
-        break;
-      }
-    }
-
-    return {
-      items: itineraries,
-      nextToken: nextPageNextToken,
-    } as {
-      items: Itinerary[];
-      nextToken?: string;
-    };
-  };
-
-  try {
-    const { items, nextToken: newNextToken } = await load(
-      future,
-      limit,
-      true,
-      nextToken
-    );
-
-    let potentialNextPage: boolean = false;
-    if (items.length === limit && newNextToken) {
-      const { items } = await load(future, 1, false, newNextToken);
-      potentialNextPage = items.length > 0;
-    }
-
-    return {
-      itineraries: items,
-      nextToken: potentialNextPage ? newNextToken : undefined,
-    };
-  } catch (err) {
-    logger.error(err);
-    console.log(err);
-    Hub.dispatch("errors", {
-      event: "getItineraries",
-      data: "Error loading itineraries",
-    });
-    throw err;
-  }
+const getItineraries = async (
+  future: boolean,
+  nextToken?: string
+): Promise<{
+  itineraries: Itinerary[];
+  nextToken: string | undefined;
+}> => {
+  // TODO: ✏️ Add getItineraries code here
 };
 
-const deleteItinerary = async (id: string) => {
-  try {
-    const op = graphqlOperation(deleteItineraryM, { input: { id: id } });
-    return (await API.graphql(op)) as GraphQLResult<DeleteItineraryMutation>;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "deleteItinerary",
-      data: "Error deleting itinerary",
-    });
-  }
+const deleteItinerary = async (id: string): Promise<any> => {
+  // TODO: ✏️ Add deleteItinerary code here
 };
 
-const saveItinerary = async (label: string, date: string) => {
-  try {
-    const res = (await API.graphql(
-      graphqlOperation(createItinerary, {
-        input: {
-          label,
-          date,
-          optimized: false,
-          points: [],
-          type: "itinerary",
-          hasStarted: false,
-        },
-      })
-    )) as GraphQLResult<CreateItineraryMutation>;
-
-    const newItinerary = res.data?.createItinerary;
-
-    return newItinerary as Itinerary;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "saveItinerary",
-      data: "Error saving itinerary",
-    });
-  }
+const saveItinerary = async (
+  label: string,
+  date: string
+): Promise<Itinerary | undefined> => {
+  // TODO: ✏️ Add saveItinerary code here
 };
 
 class ItineraryNotFoundError extends Error {
@@ -231,28 +109,7 @@ class ItineraryNotFoundError extends Error {
 }
 
 const getItinerary = async (id: string): Promise<Itinerary | undefined> => {
-  try {
-    const op = graphqlOperation(getItineraryQ, { id: id });
-    const res = (await API.graphql(op)) as GraphQLResult<GetItineraryQuery>;
-
-    const itinerary = res.data?.getItinerary;
-    if (!itinerary) {
-      throw new ItineraryNotFoundError(
-        'Unable to find itinerary with id "' + id + '"'
-      );
-    }
-
-    return itinerary;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "getItinerary",
-      data:
-        err instanceof ItineraryNotFoundError
-          ? err.message
-          : "Error loading itinerary",
-    });
-  }
+  // TODO: ✏️ Add getItinerary code here
 };
 
 const updateItinerary = async (
@@ -266,31 +123,8 @@ const updateItinerary = async (
     date?: string;
     points?: Marker[];
   }
-) => {
-  try {
-    if (!label && !date && !points) return;
-    const variables: UpdateItineraryMutationVariables = {
-      input: {
-        id: id,
-      },
-    };
-    if (label) variables.input.label = label;
-    if (date) variables.input.date = date;
-    if (points) variables.input.points = points;
-    if (points) variables.input.optimized = false;
-    const op = graphqlOperation(updateItineraryM, variables);
-    const res = (await API.graphql(
-      op
-    )) as GraphQLResult<UpdateItineraryMutation>;
-
-    return res.data?.updateItinerary;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "updateItinerary",
-      data: "Error updating itinerary",
-    });
-  }
+): Promise<any> => {
+  // TODO: ✏️ Add updateItinerary code here
 };
 
 const calculateMarkersHash = (markers: Marker[]) =>
@@ -298,27 +132,8 @@ const calculateMarkersHash = (markers: Marker[]) =>
     return acc + (obj.point.lng + obj.point.lat);
   }, 0);
 
-const optimizeItinerary = async (id: string) => {
-  try {
-    const op = graphqlOperation(optimizedM, {
-      id: id,
-    });
-
-    const res = (await API.graphql(op)) as GraphQLResult<OptimizedMutation>;
-
-    const optimizedItinerary = res.data?.optimized;
-    if (!optimizedItinerary) {
-      throw new Error("Unable to optimize itinerary");
-    }
-
-    return optimizedItinerary;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "optimizeItinerary",
-      data: "Error optimizing itinerary",
-    });
-  }
+const optimizeItinerary = async (id: string): Promise<any> => {
+  // TODO: ✏️ Add optimizeItinerary code here
 };
 
 let cachedCredentials: ICredentials;
@@ -375,50 +190,7 @@ export type RoutePathResult = {
 };
 
 const getRoutePath = async (markers: Marker[]): Promise<RoutePathResult> => {
-  const client = await getLocationClient();
-
-  const departureMarker = markers[0];
-  commandInput.DeparturePosition = [
-    departureMarker.point.lng,
-    departureMarker.point.lat,
-  ];
-  const destinationMarker = markers[markers.length - 1];
-  commandInput.DestinationPosition = [
-    destinationMarker.point.lng,
-    destinationMarker.point.lat,
-  ];
-
-  if (markers.length > 2) {
-    const waypoints = markers.slice(1, -1);
-    commandInput.WaypointPositions = waypoints.map(
-      ({ point: { lng, lat } }) => [lng, lat]
-    );
-  }
-
-  const result = await client.send(
-    new CalculateRouteCommand(commandInput as CalculateRouteCommandInput)
-  );
-
-  const distance = result.Summary?.Distance || 0;
-  const duration = result.Summary?.DurationSeconds || 0;
-
-  if (!result.Legs)
-    throw new Error("Unable to load intinerary geometry for legs");
-
-  const routeFeatureCollection = featureCollection([
-    ...result.Legs.map((leg) => {
-      return lineString(leg.Geometry?.LineString as Position[]);
-    }),
-  ]);
-
-  const combineFeauterCollection = combine(routeFeatureCollection);
-
-  return {
-    distance,
-    duration,
-    route: combineFeauterCollection as RoutePath,
-    bbox: bbox(combineFeauterCollection),
-  };
+  // TODO: ✏️ Add getRoutePath code here
 };
 
 const getMarkersBbox = (markers: Marker[]) => {
@@ -429,48 +201,11 @@ const getMarkersBbox = (markers: Marker[]) => {
 };
 
 const startItinerary = async (id: string) => {
-  try {
-    const op = graphqlOperation(startItineraryM, {
-      id: id,
-    });
-
-    const res = (await API.graphql(
-      op
-    )) as GraphQLResult<StartItineraryMutation>;
-
-    const hasStarted = res.data?.startItinerary;
-    if (!hasStarted) {
-      throw new Error("Unable to optimize itinerary");
-    }
-
-    return;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "startItinerary",
-      data: "Error starting the itinerary",
-    });
-  }
+  // TODO: ✏️ Add startItinerary code here
 };
 
 const trackItinerary = async (id: string) => {
-  try {
-    const op = graphqlOperation(getDevicePositionQ, {
-      id,
-    });
-
-    const res = (await API.graphql(
-      op
-    )) as GraphQLResult<GetDevicePositionQuery>;
-
-    return res.data?.getDevicePosition;
-  } catch (err) {
-    logger.error(err);
-    Hub.dispatch("errors", {
-      event: "trackItinerary",
-      data: "Error tracking the itinerary",
-    });
-  }
+  // TODO: ✏️ Add trackItinerary code here
 };
 
 export {
