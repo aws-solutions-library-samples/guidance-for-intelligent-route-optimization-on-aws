@@ -88,7 +88,7 @@ export class cdkStack extends cdk.Stack {
               resources: [
                 `arn:aws:geo:${cdk.Stack.of(this).region}:${
                   cdk.Stack.of(this).account
-                }:tracker/tracker_location_workshop-ok`,
+                }:tracker/tracker_location_workshop`,
               ],
               actions: ["geo:BatchUpdateDevicePosition"],
             }),
