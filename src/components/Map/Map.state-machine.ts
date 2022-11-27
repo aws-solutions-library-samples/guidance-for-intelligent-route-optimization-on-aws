@@ -4,7 +4,7 @@ import { InterpreterFrom } from "xstate/lib/types";
 import { Geo, Place, Coordinates } from "@aws-amplify/geo";
 import { Logger } from "@aws-amplify/core";
 import { LngLat, ViewState } from "react-map-gl";
-import { isToday as isDateToday, compareAsc, startOfDay } from "date-fns";
+import { isToday as isDateToday, compareAsc, startOfDay, parseISO } from "date-fns";
 
 import {
   addMarker,
@@ -141,13 +141,13 @@ const mapMachine = createMachine<MapContextType>(
 
             const today = startOfDay(new Date());
             const itineraryDate = startOfDay(
-              new Date((itinerary as Itinerary).date)
+              new Date(parseISO((itinerary as Itinerary).date))
             );
             const itineraryWhen = isDateToday(itineraryDate)
               ? "TODAY"
               : compareAsc(today, itineraryDate) === 1
-              ? "PAST"
-              : "FUTURE";
+                ? "PAST"
+                : "FUTURE";
 
             return {
               id: itinerary.id,
