@@ -34,5 +34,22 @@
     "@vitejs/plugin-react": "^2.0.0",
     "typescript": "^4.6.3",
     "vite": "^3.2.7"
+  },
+  "overrides": {
+    "aws-amplify": {
+      "@aws-sdk/client-sts": "3.348.0",
+      "@aws-sdk/client-lex-runtime-service": "3.348.0",
+      "@aws-sdk/client-lex-runtime-v2": "3.348.0",
+      "@aws-sdk/client-location": "3.348.0",
+      "@aws-sdk/client-s3": "3.348.0"
+    },
+    "@aws-amplify/ui-react": {
+      "@aws-sdk/client-sts": "3.348.0",
+      "@aws-sdk/client-location": "3.348.0"
+    },
+    "maplibre-gl-js": {
+      "@aws-sdk/client-sts": "3.348.0",
+      "@aws-sdk/client-location": "3.348.0"
+    }
   }
 }
