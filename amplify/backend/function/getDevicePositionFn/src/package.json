@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.4.0",
-    "@aws-sdk/client-location": "^3.348.0"
+    "@aws-sdk/client-location": "^3.363.0"
   }
 }
