@@ -14,10 +14,10 @@
       "showfieldauthnotification": false,
       "usesubusernamefordefaultidentityclaim": true,
       "usefieldnameforprimarykeyconnectionfield": false,
-      "enableautoindexquerynames": false,
-      "respectprimarykeyattributesonconnectionfield": false,
+      "enableautoindexquerynames": true,
+      "respectprimarykeyattributesonconnectionfield": true,
       "shoulddeepmergedirectiveconfigdefaults": false,
-      "populateownerfieldforstaticgroupauth": false
+      "populateownerfieldforstaticgroupauth": true
     },
     "frontend-ios": {
       "enablexcodeintegration": true
@@ -39,7 +39,8 @@
       "handlelistnullabilitytransparently": true,
       "emitauthprovider": true,
       "generateindexrules": true,
-      "enabledartnullsafety": true
+      "enabledartnullsafety": true,
+      "generatemodelsforlazyloadandcustomselectionset": false
     },
     "appsync": {
       "generategraphqlpermissions": true

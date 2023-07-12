@@ -1,55 +1,41 @@
 {
   "name": "aws-intelligent-route-optimization-tracking",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "dependencies": {
-    "@aws-amplify/ui-react": "^3.1.0",
-    "@floating-ui/react-dom": "^0.7.2",
+    "@aws-amplify/ui-react": "^5.0.4",
+    "@aws-amplify/ui-react-geo": "^1.0.1",
+    "@aws-sdk/client-location": "^3.369.0",
+    "@floating-ui/react-dom": "^2.0.1",
     "@turf/bbox": "^6.5.0",
     "@turf/combine": "^6.5.0",
-    "@xstate/react": "^3.0.0",
-    "aws-amplify": "^4.3.29",
-    "date-fns": "^2.28.0",
+    "@xstate/react": "^3.2.2",
+    "aws-amplify": "^5.3.3",
+    "date-fns": "^2.30.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
-    "react-day-picker": "^8.0.7",
+    "react-day-picker": "^8.8.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.4.0",
-    "react-router-dom": "^6.3.0",
-    "use-debounce": "^8.0.1"
+    "react-icons": "^4.10.1",
+    "react-router-dom": "^6.14.1",
+    "use-debounce": "^9.0.4"
   },
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "utils:resizeC9EBS": "sh scripts/resize.sh",
-    "utils:createIoTCert": "node scripts/create-cert.mjs"
+    "utils:createIoTCert": "node scripts/create-cert.mjs",
+    "utils:bootstrapEnv": "sh scripts/bootstrap_env.sh"
   },
   "devDependencies": {
-    "@aws-sdk/client-iot": "^3.194.0",
-    "@aws-sdk/client-secrets-manager": "^3.195.0",
-    "@types/jest": "^27.4.1",
-    "@types/node": "^16.11.26",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.0.0",
-    "typescript": "^4.6.3",
-    "vite": "^3.2.7"
-  },
-  "overrides": {
-    "aws-amplify": {
-      "@aws-sdk/client-sts": "3.348.0",
-      "@aws-sdk/client-lex-runtime-service": "3.348.0",
-      "@aws-sdk/client-lex-runtime-v2": "3.348.0",
-      "@aws-sdk/client-location": "3.348.0",
-      "@aws-sdk/client-s3": "3.348.0"
-    },
-    "@aws-amplify/ui-react": {
-      "@aws-sdk/client-sts": "3.348.0",
-      "@aws-sdk/client-location": "3.348.0"
-    },
-    "maplibre-gl-js": {
-      "@aws-sdk/client-sts": "3.348.0",
-      "@aws-sdk/client-location": "3.348.0"
-    }
+    "@aws-sdk/client-iot": "^3.369.0",
+    "@aws-sdk/client-secrets-manager": "^3.369.0",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.1",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@vitejs/plugin-react": "^4.0.3",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.3"
   }
 }
