@@ -64,7 +64,7 @@
     }
   },
   "Parameters": {
-    "authlocationworkshop281862b3UserPoolId": {
+    "authlocationworkshop81a59ef9UserPoolId": {
       "Type": "String"
     },
     "authRoleName": {
@@ -327,5 +327,5 @@
       }
     }
   },
-  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"geo-PlaceIndex\",\"metadata\":{}}"
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"geo-PlaceIndex\",\"metadata\":{}}"
 }

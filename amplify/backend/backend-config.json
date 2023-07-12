@@ -7,7 +7,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "locationworkshop281862b3"
+          "resourceName": "locationworkshop81a59ef9"
         }
       ],
       "output": {
@@ -16,7 +16,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authlocationworkshop281862b3"
+              "userPoolId": "authlocationworkshop81a59ef9"
             }
           }
         }
@@ -26,7 +26,7 @@
     }
   },
   "auth": {
-    "locationworkshop281862b3": {
+    "locationworkshop81a59ef9": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -129,7 +129,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "locationworkshop281862b3"
+          "resourceName": "locationworkshop81a59ef9"
         }
       ],
       "isDefault": true,
@@ -147,7 +147,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "locationworkshop281862b3"
+          "resourceName": "locationworkshop81a59ef9"
         }
       ],
       "isDefault": true,

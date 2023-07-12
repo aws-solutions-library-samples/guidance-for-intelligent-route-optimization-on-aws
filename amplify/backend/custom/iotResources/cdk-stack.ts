@@ -21,8 +21,7 @@ export class cdkStack extends cdk.Stack {
     /* AWS CDK code goes here - learn more: https://docs.aws.amazon.com/cdk/latest/guide/home.html */
 
     // Identifier for the IoT Core Certificate, REPLACE THIS WITH YOUR CERTIFICATE ID
-    const CERTIFICATE_ID =
-      "8e4023b8cf8c1f12d910b1a13631b0d7bc9378d1a31ed88d1e2c45366c4309e9";
+    const CERTIFICATE_ID = "[YOUR_CERTIFICATE_ID]";
 
     // Create an IoT Core Policy
     const policy = new iot.CfnPolicy(this, "Policy", {
