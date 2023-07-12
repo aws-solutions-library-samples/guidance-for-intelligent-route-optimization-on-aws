@@ -2,12 +2,12 @@
   "name": "aws-intelligent-route-optimization-tracking",
   "version": "0.5.0",
   "dependencies": {
-    "@aws-amplify/ui-react": "^3.1.0",
+    "@aws-amplify/ui-react": "^5.0.4",
     "@floating-ui/react-dom": "^0.7.2",
     "@turf/bbox": "^6.5.0",
     "@turf/combine": "^6.5.0",
     "@xstate/react": "^3.0.0",
-    "aws-amplify": "^4.3.29",
+    "aws-amplify": "^5.3.3",
     "date-fns": "^2.28.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
@@ -25,8 +25,8 @@
     "utils:createIoTCert": "node scripts/create-cert.mjs"
   },
   "devDependencies": {
-    "@aws-sdk/client-iot": "^3.194.0",
-    "@aws-sdk/client-secrets-manager": "^3.195.0",
+    "@aws-sdk/client-iot": "^3.369.0",
+    "@aws-sdk/client-secrets-manager": "^3.369.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
     "@types/react": "^18.0.21",
