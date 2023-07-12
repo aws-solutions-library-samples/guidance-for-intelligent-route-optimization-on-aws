@@ -1,8 +1,7 @@
 [
   {
     "Action": [
-      "geo:GetDevicePosition",
-      "geo:BatchGetDevicePosition"
+      "geo:GetDevicePosition"
     ],
     "Resource": [
       {

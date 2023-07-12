@@ -1,28 +1,4 @@
 /* Amplify Params - DO NOT EDIT
-	API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT
-	API_LOCATIONWORKSHOP_ITINERARYTABLE_ARN
-	API_LOCATIONWORKSHOP_ITINERARYTABLE_NAME
-	ENV
-	FUNCTION_DEVICESIMULATORFN_NAME
-	REGION
-Amplify Params - DO NOT EDIT */
-
-/**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
-exports.handler = async (event) => {
-  console.log(`EVENT: ${JSON.stringify(event)}`);
-  return {
-    statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-    body: JSON.stringify("Hello from Lambda!"),
-  };
-};
-/* Amplify Params - DO NOT EDIT
 	ENV
   REGION
   FUNCTION_DEVICESIMULATORFN_NAME
@@ -112,14 +88,12 @@ exports.handler = async (event) => {
     };
   }
 
-  // const encodedWaypoints = encode(waypoints);
   logger.debug("payload", {
     id: itineraryId,
     waypoints: waypoints,
   });
 
   try {
-    // TODO: see if we should use InvokeAsyncCommand instead
     await lambdaClient.send(
       new InvokeCommand({
         FunctionName: process.env.FUNCTION_DEVICESIMULATORFN_NAME,

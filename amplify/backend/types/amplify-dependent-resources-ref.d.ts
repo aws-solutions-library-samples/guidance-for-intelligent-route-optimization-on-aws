@@ -1,58 +1,62 @@
 export type AmplifyDependentResourcesAttributes = {
-    "auth": {
-        "locationworkshop44c90446": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
-        }
-    },
-    "geo": {
-        "workshopMap": {
-            "Name": "string",
-            "Style": "string",
-            "Region": "string",
-            "Arn": "string"
-        },
-        "workshopPlaces": {
-            "Name": "string",
-            "Region": "string",
-            "Arn": "string"
-        }
-    },
     "api": {
-        "locationworkshop": {
-            "GraphQLAPIIdOutput": "string",
-            "GraphQLAPIEndpointOutput": "string"
-        }
+      "locationworkshop": {
+        "GraphQLAPIEndpointOutput": "string",
+        "GraphQLAPIIdOutput": "string"
+      }
+    },
+    "auth": {
+      "locationworkshop281862b3": {
+        "AppClientID": "string",
+        "AppClientIDWeb": "string",
+        "IdentityPoolId": "string",
+        "IdentityPoolName": "string",
+        "UserPoolArn": "string",
+        "UserPoolId": "string",
+        "UserPoolName": "string"
+      }
     },
     "function": {
-        "routeOptimizerFn": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "deviceSimulatorFn": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "startItineraryFn": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "getDevicePositionFn": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        }
+      "deviceSimulatorFn": {
+        "Arn": "string",
+        "LambdaExecutionRole": "string",
+        "LambdaExecutionRoleArn": "string",
+        "Name": "string",
+        "Region": "string"
+      },
+      "getDevicePositionFn": {
+        "Arn": "string",
+        "LambdaExecutionRole": "string",
+        "LambdaExecutionRoleArn": "string",
+        "Name": "string",
+        "Region": "string"
+      },
+      "routeOptimizerFn": {
+        "Arn": "string",
+        "LambdaExecutionRole": "string",
+        "LambdaExecutionRoleArn": "string",
+        "Name": "string",
+        "Region": "string"
+      },
+      "startItineraryFn": {
+        "Arn": "string",
+        "LambdaExecutionRole": "string",
+        "LambdaExecutionRoleArn": "string",
+        "Name": "string",
+        "Region": "string"
+      }
+    },
+    "geo": {
+      "workshopMap": {
+        "Arn": "string",
+        "Name": "string",
+        "Region": "string",
+        "Style": "string"
+      },
+      "workshopPlaces": {
+        "Arn": "string",
+        "Name": "string",
+        "Region": "string"
+      }
     }
-}
+  }

@@ -1,6 +1,6 @@
-import { AmplifyRootStackTemplate } from "@aws-amplify/cli-extensibility-helper";
+import { AmplifyProjectInfo, AmplifyRootStackTemplate } from '@aws-amplify/cli-extensibility-helper';
 
-export function override(resources: AmplifyRootStackTemplate) {
+export function override(resources: AmplifyRootStackTemplate, amplifyProjectInfo: AmplifyProjectInfo) {
   const authRole = resources.authRole;
 
   const basePolicies = Array.isArray(authRole.policies)
@@ -17,10 +17,9 @@ export function override(resources: AmplifyRootStackTemplate) {
           {
             Resource: {
               "Fn::Sub":
-                // eslint-disable-next-line no-template-curly-in-string
                 "arn:aws:geo:${AWS::Region}:${AWS::AccountId}:route-calculator/routecalculator_location_workshop",
             },
-            Action: ["geo:CalculateRoute*"],
+            Action: ["geo:CalculateRoute"],
             Effect: "Allow",
           },
         ],

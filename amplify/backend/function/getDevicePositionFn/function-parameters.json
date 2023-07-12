@@ -1,4 +1,5 @@
 {
+  "lambdaLayers": [],
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "trackerName",

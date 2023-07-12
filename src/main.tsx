@@ -4,6 +4,7 @@ import App from "./components/App";
 import { AmplifyProvider } from "@aws-amplify/ui-react";
 import "normalize.css";
 import "@aws-amplify/ui-react/styles.css";
+import '@aws-amplify/ui-react-geo/styles.css';
 import "./index.css";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";

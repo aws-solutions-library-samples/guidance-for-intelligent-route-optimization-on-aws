@@ -5,10 +5,7 @@ const {
 } = require("@aws-sdk/client-location");
 const { lineString } = require("@turf/helpers");
 const along = require("@turf/along").default;
-const {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-} = require("@aws-sdk/client-secrets-manager");
+const { getSecret } = require("@aws-lambda-powertools/parameters/secrets");
 
 const locationClient = new LocationClient();
 
@@ -92,22 +89,19 @@ class Itinerary {
     this.updateFrequency = -1;
     this.hasNextStep = false;
 
-    this.secretsManagerClient = new SecretsManagerClient({});
     this.secretId = secretId;
   }
 
   getCertAndKey = async () => {
     if (!this.cert || !this.key) {
-      const secret = await this.secretsManagerClient.send(
-        new GetSecretValueCommand({
-          SecretId: this.secretId,
-        })
-      );
-      const { SecretString } = secret;
-      if (!SecretString) {
+      const secret = await getSecret(this.secretId, {
+        transform: "json",
+        maxAge: 10000,
+      });
+      if (!secret) {
         throw new Error("Could not find secret");
       }
-      const { cert, keyPair } = JSON.parse(SecretString);
+      const { cert, keyPair } = secret;
 
       this.cert = cert;
       this.key = keyPair;

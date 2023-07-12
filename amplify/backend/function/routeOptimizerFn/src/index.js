@@ -6,7 +6,6 @@
 	API_LOCATIONWORKSHOP_GRAPHQLAPIIDOUTPUT
 	ROUTE_CALCULATOR_NAME
 Amplify Params - DO NOT EDIT */
-
 const {
   DynamoDBClient,
   GetItemCommand,
@@ -19,9 +18,9 @@ const {
 } = require("@aws-sdk/client-location");
 const { Logger } = require("@aws-lambda-powertools/logger");
 
+const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 const dynamoDBClient = new DynamoDBClient();
 const locationClient = new LocationClient();
-const logger = new Logger({ serviceName: "aws-intelligent-supply-chain" });
 
 class ItineraryAlreadyStarted extends Error {
   constructor(message) {
@@ -51,6 +50,7 @@ exports.handler = async (event) => {
   logger.debug("event", { event });
 
   const itineraryId = event.arguments.id;
+
   let waypoints = [];
   let markers;
   try {
@@ -101,6 +101,7 @@ exports.handler = async (event) => {
         body: "Itinerary has less than 3 points",
       };
     }
+
     logger.error(`Error getting itinerary: ${err}`);
     return {
       statusCode: 500,

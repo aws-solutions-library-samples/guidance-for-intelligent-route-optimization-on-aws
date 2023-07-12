@@ -1,10 +1,12 @@
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import * as AmplifyHelpers from "@aws-amplify/cli-extensibility-helper";
-import * as location from "@aws-cdk/aws-location";
+import { AmplifyDependentResourcesAttributes } from "../../types/amplify-dependent-resources-ref";
+import { Construct } from "constructs";
+import * as location from "aws-cdk-lib/aws-location";
 
 export class cdkStack extends cdk.Stack {
   constructor(
-    scope: cdk.Construct,
+    scope: Construct,
     id: string,
     props?: cdk.StackProps,
     amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps

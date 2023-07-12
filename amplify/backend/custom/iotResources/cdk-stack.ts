@@ -1,14 +1,16 @@
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import * as AmplifyHelpers from "@aws-amplify/cli-extensibility-helper";
-import * as iot from "@aws-cdk/aws-iot";
-import * as iam from "@aws-cdk/aws-iam";
+import { AmplifyDependentResourcesAttributes } from "../../types/amplify-dependent-resources-ref";
+import { Construct } from "constructs";
+import * as iot from "aws-cdk-lib/aws-iot";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export class cdkStack extends cdk.Stack {
   constructor(
-    scope: cdk.Construct,
+    scope: Construct,
     id: string,
     props?: cdk.StackProps,
-    _amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps
+    amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps
   ) {
     super(scope, id, props);
     /* Do not remove - Amplify CLI automatically injects the current deployment environment in this input parameter */
@@ -16,11 +18,11 @@ export class cdkStack extends cdk.Stack {
       type: "String",
       description: "Current Amplify CLI env name",
     });
-
     /* AWS CDK code goes here - learn more: https://docs.aws.amazon.com/cdk/latest/guide/home.html */
 
     // Identifier for the IoT Core Certificate, REPLACE THIS WITH YOUR CERTIFICATE ID
-    const CERTIFICATE_ID = "[YOUR_CERTIFICATE_ID]";
+    const CERTIFICATE_ID =
+      "8e4023b8cf8c1f12d910b1a13631b0d7bc9378d1a31ed88d1e2c45366c4309e9";
 
     // Create an IoT Core Policy
     const policy = new iot.CfnPolicy(this, "Policy", {
@@ -103,21 +105,17 @@ export class cdkStack extends cdk.Stack {
       topicRulePayload: {
         sql: `SELECT * FROM 'iot/trackedAssets'`,
         awsIotSqlVersion: "2016-03-23",
-        actions: [],
-      },
-    });
-
-    topicRule.addOverride("Properties.TopicRulePayload.Actions.0", {
-      Location: {
-        DeviceId: "${deviceID}",
-        Latitude: "${longitude}",
-        Longitude: "${latitude}",
-        RoleArn: role.roleArn,
-        Timestamp: {
-          Value: "${timestamp()}",
-          Unit: "MILLISECONDS",
-        },
-        TrackerName: "tracker_location_workshop",
+        actions: [
+          {
+            location: {
+              deviceId: "${deviceID}",
+              latitude: "${longitude}",
+              longitude: "${latitude}",
+              roleArn: role.roleArn,
+              trackerName: "tracker_location_workshop",
+            },
+          },
+        ],
       },
     });
   }

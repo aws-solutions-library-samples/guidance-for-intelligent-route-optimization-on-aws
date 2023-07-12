@@ -1,158 +1,248 @@
 {
-  "auth": {
-    "locationworkshop44c90446": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false,
-      "frontendAuthConfig": {
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      }
-    }
-  },
-  "geo": {
-    "workshopMap": {
-      "isDefault": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Map",
-      "mapStyle": "VectorHereExplore",
-      "accessType": "AuthorizedUsers",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "locationworkshop44c90446",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ]
-    },
-    "workshopPlaces": {
-      "isDefault": true,
-      "providerPlugin": "awscloudformation",
-      "service": "PlaceIndex",
-      "dataProvider": "Here",
-      "dataSourceIntendedUse": "Storage",
-      "accessType": "AuthorizedUsers",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "locationworkshop44c90446",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ]
-    }
-  },
-  "custom": {
-    "locationResources": {
-      "service": "customCDK",
-      "providerPlugin": "awscloudformation"
-    },
-    "iotResources": {
-      "service": "customCDK",
-      "providerPlugin": "awscloudformation"
-    }
-  },
   "api": {
     "locationworkshop": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "locationworkshop44c90446",
           "attributes": [
             "UserPoolId"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "locationworkshop281862b3"
         }
       ],
       "output": {
         "authConfig": {
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authlocationworkshop44c90446"
+              "userPoolId": "authlocationworkshop281862b3"
             }
-          },
-          "additionalAuthenticationProviders": []
+          }
         }
-      }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "locationworkshop281862b3": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "custom": {
+    "iotResources": {
+      "providerPlugin": "awscloudformation",
+      "service": "customCDK"
+    },
+    "locationResources": {
+      "providerPlugin": "awscloudformation",
+      "service": "customCDK"
     }
   },
   "function": {
-    "routeOptimizerFn": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "locationworkshop",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
-        }
-      ]
-    },
     "deviceSimulatorFn": {
       "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
       "dependsOn": [
         {
-          "category": "api",
-          "resourceName": "locationworkshop",
           "attributes": [
             "GraphQLAPIIdOutput"
-          ]
+          ],
+          "category": "api",
+          "resourceName": "locationworkshop"
         }
-      ]
-    },
-    "startItineraryFn": {
-      "build": true,
+      ],
       "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "deviceSimulatorFn",
-          "attributes": [
-            "Name"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "locationworkshop",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
-        }
-      ]
+      "service": "Lambda"
     },
     "getDevicePositionFn": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
+      "service": "Lambda"
+    },
+    "routeOptimizerFn": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "locationworkshop"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "startItineraryFn": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "deviceSimulatorFn"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "locationworkshop"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "geo": {
+    "workshopMap": {
+      "accessType": "AuthorizedUsers",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "locationworkshop281862b3"
+        }
+      ],
+      "isDefault": true,
+      "mapStyle": "VectorHereExplore",
+      "providerPlugin": "awscloudformation",
+      "service": "Map"
+    },
+    "workshopPlaces": {
+      "accessType": "AuthorizedUsers",
+      "dataProvider": "Here",
+      "dataSourceIntendedUse": "Storage",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "locationworkshop281862b3"
+        }
+      ],
+      "isDefault": true,
+      "providerPlugin": "awscloudformation",
+      "service": "PlaceIndex"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_deviceSimulatorFn_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deviceSimulatorFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_deviceSimulatorFn_routeCalculatorName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deviceSimulatorFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_deviceSimulatorFn_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deviceSimulatorFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_getDevicePositionFn_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getDevicePositionFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_getDevicePositionFn_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getDevicePositionFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_getDevicePositionFn_trackerName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getDevicePositionFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_routeOptimizerFn_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "routeOptimizerFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_routeOptimizerFn_routeCalculatorName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "routeOptimizerFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_routeOptimizerFn_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "routeOptimizerFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_startItineraryFn_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "startItineraryFn"
+        }
+      ]
+    },
+    "AMPLIFY_function_startItineraryFn_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "startItineraryFn"
+        }
+      ]
     }
   }
 }

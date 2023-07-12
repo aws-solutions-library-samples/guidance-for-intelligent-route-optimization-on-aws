@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useSelector } from "@xstate/react";
 import { useParams } from "react-router-dom";
-import { MapView } from "@aws-amplify/ui-react";
+import { MapView } from "@aws-amplify/ui-react-geo";
 import { Logger } from "@aws-amplify/core";
 import { NavigationControl } from "react-map-gl";
 import { MapLayerMouseEvent } from "react-map-gl";
