@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "An auto-generated nested stack for Guidance for Intelligent Route Optimization on AWS (SO0123)",
+  "Description": "An auto-generated nested stack for Guidance for Intelligent Route Optimization on AWS (SO9274)",
   "Metadata": {},
   "Parameters": {
     "AppSyncApiId": {
